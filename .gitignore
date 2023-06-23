@@ -1,0 +1,29 @@
+*.exe
+.terraform
+.terraform.lock.hcl
+*.tfstate*
+
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+
+# Visual Studio
+.vs/
+
+# User csproj
+*.csproj.user
+
+# Startup projects config (for SwitchStartupProject extension)
+src/*.sln.startup.json
+
+# Other
+node_modules/
+*.log

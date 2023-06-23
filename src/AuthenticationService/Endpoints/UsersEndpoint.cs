@@ -1,4 +1,5 @@
-﻿using AuthenticationService.Identity;
+﻿using AuthenticationService.Dto;
+using AuthenticationService.Identity;
 using Microsoft.AspNetCore.Identity;
 
 namespace AuthenticationService.Endpoints

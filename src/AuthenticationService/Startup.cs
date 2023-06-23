@@ -54,8 +54,4 @@ namespace AuthenticationService
             });
         }
     }
-
-    record UserDto(string Name, string Password, string Email, string Role);
-
-    record RoleDto(string Name);
 }

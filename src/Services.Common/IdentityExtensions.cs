@@ -1,23 +1,16 @@
 ﻿using System.Text;
-using AuthenticationService.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using Storage;
 
-namespace AuthenticationService
+namespace Services.Common
 {
     public static class IdentityServiceCollectionExtensions
     {
-        public static void AddMongoDbIdentity(this IServiceCollection services, MongoDbConfig mongoDbConfig)
-        {
-            services
-                .AddIdentity<User, Role>()
-                .AddMongoDbStores<User, Role, Guid>(mongoDbConfig.ConnectionString, mongoDbConfig.DatabaseName);
-        }
-
         public static void AddJwtAuthentication(this IServiceCollection services, JwtConfig jwtConfig)
         {
-            services.AddAuthentication(options => {
+            services.AddAuthentication(options =>
+            {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;

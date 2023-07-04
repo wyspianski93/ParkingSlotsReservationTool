@@ -1,8 +1,8 @@
-﻿using AuthenticationService.Dto;
-using AuthenticationService.Identity;
+﻿using Authentication.Service.Dto;
+using Authentication.Service.Identity;
 using Microsoft.AspNetCore.Identity;
 
-namespace AuthenticationService.Endpoints
+namespace Authentication.Service.Endpoints
 {
     public static class UsersEndpoint
     {

@@ -1,12 +1,13 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using AuthenticationService.Dto;
-using AuthenticationService.Identity;
+using Authentication.Service.Dto;
+using Authentication.Service.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
+using Services.Common;
 
-namespace AuthenticationService.Endpoints
+namespace Authentication.Service.Endpoints
 {
     public static class LoginEndpoint
     {
@@ -32,7 +33,9 @@ namespace AuthenticationService.Endpoints
 
                 var roles = await userManager.GetRolesAsync(user);
 
-                var claims = roles.Select(role => new Claim(ClaimTypes.Role, role));
+                var claims = roles
+                    .Select(role => new Claim(ClaimTypes.Role, role))
+                    .Union(new List<Claim>() { new(ClaimsConstants.UserId, user.Id.ToString()) });
 
                 var tokenOptions = new JwtSecurityToken(
                     issuer: jwtConfig.Issuer,

@@ -1,8 +1,10 @@
-﻿using AuthenticationService.Endpoints;
+﻿using Authentication.Service.Endpoints;
 using Microsoft.AspNetCore.Authorization;
+using Services.Common;
 using Storage;
+using Storage.Serializing;
 
-namespace AuthenticationService
+namespace Authentication.Service
 {
     public class Startup
     {
@@ -25,8 +27,10 @@ namespace AuthenticationService
             services.AddJwtAuthentication(_jwtConfig);
             services.AddAuthorization();
 
-            services.AddScoped<IMongoDbConfig>(_ => _mongoDbConfig);
-            services.AddScoped<IRepository, MongoRepository>();
+            services.AddSingleton<IMongoDbConfig>(_ => _mongoDbConfig);
+            services.AddSingleton<IRepository, MongoRepository>();
+            services.AddSingleton<IBsonSerializersRegistrant, CommonSerializersRegistrant>();
+            services.AddSingleton<IBsonSerializersRegistrantsRunner, BsonSerializersRegistrantsRunner>();
         }
 
         public void Configure(IApplicationBuilder app,
@@ -43,14 +47,15 @@ namespace AuthenticationService
             app.UseAuthorization();
 
             app.UseHttpsRedirection();
-            
+
             app.UseEndpoints(endpoint =>
             {
                 endpoint.MapRolesEndpoint();
                 endpoint.MapUsersEndpoint();
                 endpoint.MapLoginEndpoint(_jwtConfig);
 
-                endpoint.MapGet("/hello-world", [Authorize]() => Results.Ok("Hello world!"));
+                endpoint.MapGet("/hello-world", [Authorize] (HttpContext
+                context) => Results.Ok("Hello world!"));
             });
         }
     }

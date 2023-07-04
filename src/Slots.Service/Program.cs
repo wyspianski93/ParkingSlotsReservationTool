@@ -1,4 +1,4 @@
-using AuthenticationService;
+using Slots.Service;
 
 var builder = Host.CreateDefaultBuilder(args);
 

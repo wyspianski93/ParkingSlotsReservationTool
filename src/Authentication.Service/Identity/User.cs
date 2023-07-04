@@ -1,7 +1,7 @@
 ﻿using AspNetCore.Identity.MongoDbCore.Models;
 using MongoDbGenericRepository.Attributes;
 
-namespace AuthenticationService.Identity
+namespace Authentication.Service.Identity
 {
     [CollectionName("Users")]
     public class User : MongoIdentityUser<Guid>

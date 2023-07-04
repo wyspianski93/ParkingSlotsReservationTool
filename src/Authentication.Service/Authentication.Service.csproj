@@ -15,7 +15,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Services.Common\Services.Common.csproj" />
     <ProjectReference Include="..\Storage\Storage.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Models\Database\" />
   </ItemGroup>
 
 </Project>

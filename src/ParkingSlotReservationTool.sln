@@ -3,9 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33110.190
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthenticationService", "AuthenticationService\AuthenticationService.csproj", "{48B3C2E1-23D9-4AEE-8E8F-DF3FD9E898C3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Authentication.Service", "Authentication.Service\Authentication.Service.csproj", "{48B3C2E1-23D9-4AEE-8E8F-DF3FD9E898C3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Storage", "Storage\Storage.csproj", "{AF7A5755-EA8D-4AE2-9D7B-4AC9456039E4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Storage", "Storage\Storage.csproj", "{AF7A5755-EA8D-4AE2-9D7B-4AC9456039E4}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Slots.Service", "Slots.Service\Slots.Service.csproj", "{ACA03FDD-EE0A-470F-AD11-9096AC016212}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services.Common", "Services.Common\Services.Common.csproj", "{52F6F42D-3661-4217-B01D-50F2DC3A9CC1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +25,14 @@ Global
 		{AF7A5755-EA8D-4AE2-9D7B-4AC9456039E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AF7A5755-EA8D-4AE2-9D7B-4AC9456039E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AF7A5755-EA8D-4AE2-9D7B-4AC9456039E4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ACA03FDD-EE0A-470F-AD11-9096AC016212}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ACA03FDD-EE0A-470F-AD11-9096AC016212}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ACA03FDD-EE0A-470F-AD11-9096AC016212}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ACA03FDD-EE0A-470F-AD11-9096AC016212}.Release|Any CPU.Build.0 = Release|Any CPU
+		{52F6F42D-3661-4217-B01D-50F2DC3A9CC1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{52F6F42D-3661-4217-B01D-50F2DC3A9CC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{52F6F42D-3661-4217-B01D-50F2DC3A9CC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{52F6F42D-3661-4217-B01D-50F2DC3A9CC1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

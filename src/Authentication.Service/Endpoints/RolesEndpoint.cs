@@ -1,8 +1,8 @@
-﻿using AuthenticationService.Dto;
-using AuthenticationService.Identity;
+﻿using Authentication.Service.Dto;
+using Authentication.Service.Identity;
 using Microsoft.AspNetCore.Identity;
 
-namespace AuthenticationService.Endpoints
+namespace Authentication.Service.Endpoints
 {
     public static class RolesEndpoint
     {
@@ -23,6 +23,11 @@ namespace AuthenticationService.Endpoints
             endpoint.MapGet("/roles/get/{roleName}", async (string roleName, RoleManager<Role> roleManger) =>
             {
                 var role = await roleManger.FindByNameAsync(roleName);
+
+                if (role == null)
+                {
+                    return Results.NotFound($"Role '{roleName}' not found");
+                }
 
                 return Results.Ok(role);
             });

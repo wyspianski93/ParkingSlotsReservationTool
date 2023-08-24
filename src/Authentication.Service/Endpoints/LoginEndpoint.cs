@@ -35,7 +35,7 @@ namespace Authentication.Service.Endpoints
 
                 var claims = roles
                     .Select(role => new Claim(ClaimTypes.Role, role))
-                    .Union(new List<Claim>() { new(ClaimsConstants.UserId, user.Id.ToString()) });
+                    .Union(new List<Claim>() { new(ClaimsConstants.UserId, user.Id.ToString()) }).ToList();
 
                 var tokenOptions = new JwtSecurityToken(
                     issuer: jwtConfig.Issuer,

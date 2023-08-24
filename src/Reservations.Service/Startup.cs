@@ -1,12 +1,9 @@
-﻿using EventBus;
+﻿using Reservations.Service.Endpoints;
 using Services.Common;
-using Slots.Service.Endpoints;
-using Slots.Service.Events;
-using Slots.Service.EventsHandlers;
 using Storage;
 using Storage.Serializing;
 
-namespace Slots.Service
+namespace Reservations.Service
 {
     public class Startup
     {
@@ -32,13 +29,11 @@ namespace Slots.Service
             services.AddSingleton<IBsonSerializersRegistrant, CommonSerializersRegistrant>();
             services.AddSingleton<IBsonSerializersRegistrantsRunner, BsonSerializersRegistrantsRunner>();
 
-            services.AddSingleton<ISlotsRepository, SlotsRepository>();
+            services.AddSingleton<IReservationsRepository, ReservationsRepository>();
             services.AddSingleton<IRepository, MongoRepository>();
             services.AddScoped<IIdentityService, IdentityService>();
 
-            services.AddTransient<IEventHandler<ReservationCreatedEvent>, ReservationCreatedEventHandler>();
-            services.AddTransient<ReservationCreatedEventHandler>();
-            services.AddEventBus("slots_service");
+            services.AddEventBus("reservations_service");
         }
 
         public void Configure(IApplicationBuilder app,
@@ -58,7 +53,7 @@ namespace Slots.Service
 
             app.UseEndpoints(endpoint =>
             {
-                endpoint.MapSlotsEndpoint();
+                endpoint.MapReservationsEndpoint();
             });
         }
     }

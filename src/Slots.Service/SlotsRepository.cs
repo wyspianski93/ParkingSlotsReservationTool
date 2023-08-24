@@ -7,6 +7,8 @@ namespace Slots.Service
     {
         Task AddSlotAsync(Slot slot);
 
+        Task UpdateSlotReservationsAsync(Guid slotId, Reservation reservation);
+
         Task<bool> CheckSlotExistsAsync(string slotName);
     }
 
@@ -22,6 +24,16 @@ namespace Slots.Service
         public async Task AddSlotAsync(Slot slot)
         {
            await _repository.AddAsync(slot);
+        }
+
+        public async Task UpdateSlotReservationsAsync(Guid slotId, Reservation reservation)
+        {
+            var slot = await _repository.FindAsync<Slot>(x => x.Id == slotId).ConfigureAwait(false);
+
+            var currentReservations = slot.Reservations?.ToList() ?? new List<Reservation>();
+            currentReservations.Add(reservation);
+
+            await _repository.UpdateOneAsync<Slot, IReadOnlyCollection<Reservation>>(x => x.Id == slotId, x => x.Reservations, currentReservations);
         }
 
         public async Task<bool> CheckSlotExistsAsync(string slotName)

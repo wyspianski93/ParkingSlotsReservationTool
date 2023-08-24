@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Services.Common;
 using Slots.Service.Dto;
 using Slots.Service.Models;
 

@@ -27,3 +27,4 @@ src/*.sln.startup.json
 # Other
 node_modules/
 *.log
+src/Reservations.Service/Properties/launchSettings.json

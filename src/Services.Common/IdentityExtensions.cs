@@ -29,7 +29,6 @@ namespace Services.Common
                     RequireExpirationTime = false
                 };
             });
-
         }
     }
 }

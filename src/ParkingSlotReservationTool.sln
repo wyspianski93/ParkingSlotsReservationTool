@@ -9,7 +9,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Storage", "Storage\Storage.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Slots.Service", "Slots.Service\Slots.Service.csproj", "{ACA03FDD-EE0A-470F-AD11-9096AC016212}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services.Common", "Services.Common\Services.Common.csproj", "{52F6F42D-3661-4217-B01D-50F2DC3A9CC1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Services.Common", "Services.Common\Services.Common.csproj", "{52F6F42D-3661-4217-B01D-50F2DC3A9CC1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reservations.Service", "Reservations.Service\Reservations.Service.csproj", "{0D5BE49D-FCD1-4C81-A755-2E84377A3BB4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventBus", "EventBus\EventBus.csproj", "{CC6D43FC-A2FE-4334-AAA3-BD5680390366}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +37,14 @@ Global
 		{52F6F42D-3661-4217-B01D-50F2DC3A9CC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{52F6F42D-3661-4217-B01D-50F2DC3A9CC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{52F6F42D-3661-4217-B01D-50F2DC3A9CC1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0D5BE49D-FCD1-4C81-A755-2E84377A3BB4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0D5BE49D-FCD1-4C81-A755-2E84377A3BB4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0D5BE49D-FCD1-4C81-A755-2E84377A3BB4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0D5BE49D-FCD1-4C81-A755-2E84377A3BB4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CC6D43FC-A2FE-4334-AAA3-BD5680390366}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CC6D43FC-A2FE-4334-AAA3-BD5680390366}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CC6D43FC-A2FE-4334-AAA3-BD5680390366}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CC6D43FC-A2FE-4334-AAA3-BD5680390366}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

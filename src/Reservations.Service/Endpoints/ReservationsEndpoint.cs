@@ -33,12 +33,8 @@ namespace Reservations.Service.Endpoints
 
                     await reservationsRepository.AddReservationAsync(newReservation);
 
-                    eventBus.Publish(new ReservationCreatedEvent()
-                    {
-                        SlotId = newReservation.SlotId,
-                        ReservationId = newReservation.Id,
-                        ReservationPeriod = newReservation.Period
-                    });
+                    eventBus.Publish(
+                        new ReservationCreatedEvent(newReservation.SlotId, newReservation.Id, newReservation.Period));
 
                     return Results.Ok($"Reservation created. Waiting for slot's owner confirmation.");
                 });
@@ -51,11 +47,8 @@ namespace Reservations.Service.Endpoints
                     await reservationsRepository
                         .UpdateReservationStatusAsync(reservationIdDto.ReservationId, ReservationStatus.Confirmed).ConfigureAwait(false);
 
-                    eventBus.Publish(new ReservationStatusUpdatedEvent()
-                    {
-                        ReservationId = reservationIdDto.ReservationId,
-                        Status = ReservationStatus.Confirmed
-                    });
+                    eventBus.Publish(
+                        new ReservationStatusUpdatedEvent(reservationIdDto.ReservationId, ReservationStatus.Confirmed));
                 });
 
             endpoint.MapPost(
@@ -66,11 +59,8 @@ namespace Reservations.Service.Endpoints
                     await reservationsRepository
                         .UpdateReservationStatusAsync(reservationIdDto.ReservationId, ReservationStatus.Canceled).ConfigureAwait(false);
 
-                    eventBus.Publish(new ReservationStatusUpdatedEvent()
-                    {
-                        ReservationId = reservationIdDto.ReservationId,
-                        Status = ReservationStatus.Canceled
-                    });
+                    eventBus.Publish(
+                        new ReservationStatusUpdatedEvent(reservationIdDto.ReservationId, ReservationStatus.Canceled));
                 });
         }
     }

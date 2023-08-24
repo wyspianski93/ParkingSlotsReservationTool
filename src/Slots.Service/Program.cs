@@ -16,5 +16,5 @@ using var scope = app.Services.CreateScope();
 var eventBus = scope.ServiceProvider.GetRequiredService<IEventBus>();
 
 eventBus.Subscribe<ReservationCreatedEvent, ReservationCreatedEventHandler>();
-
+eventBus.Subscribe<ReservationStatusUpdatedEvent, ReservationStatusUpdatedEventHandler>();
 app.Run();

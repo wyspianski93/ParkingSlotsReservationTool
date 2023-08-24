@@ -36,8 +36,8 @@ namespace Slots.Service
             services.AddSingleton<IRepository, MongoRepository>();
             services.AddScoped<IIdentityService, IdentityService>();
 
-            services.AddTransient<IEventHandler<ReservationCreatedEvent>, ReservationCreatedEventHandler>();
             services.AddTransient<ReservationCreatedEventHandler>();
+            services.AddTransient<ReservationStatusUpdatedEventHandler>();
             services.AddEventBus("slots_service");
         }
 

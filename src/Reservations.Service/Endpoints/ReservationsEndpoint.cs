@@ -46,19 +46,31 @@ namespace Reservations.Service.Endpoints
             endpoint.MapPost(
                 "/reservation/accept",
                 [Authorize]
-                async(ReservationIdDto reservationIdDto, IReservationsRepository reservationsRepository) =>
+                async(ReservationIdDto reservationIdDto, IReservationsRepository reservationsRepository, IEventBus eventBus) =>
                 {
                     await reservationsRepository
                         .UpdateReservationStatusAsync(reservationIdDto.ReservationId, ReservationStatus.Confirmed).ConfigureAwait(false);
+
+                    eventBus.Publish(new ReservationStatusUpdatedEvent()
+                    {
+                        ReservationId = reservationIdDto.ReservationId,
+                        Status = ReservationStatus.Confirmed
+                    });
                 });
 
             endpoint.MapPost(
                 "/reservation/cancel",
                 [Authorize]
-                async (ReservationIdDto reservationIdDto, IReservationsRepository reservationsRepository) =>
+                async (ReservationIdDto reservationIdDto, IReservationsRepository reservationsRepository, IEventBus eventBus) =>
                 {
                     await reservationsRepository
                         .UpdateReservationStatusAsync(reservationIdDto.ReservationId, ReservationStatus.Canceled).ConfigureAwait(false);
+
+                    eventBus.Publish(new ReservationStatusUpdatedEvent()
+                    {
+                        ReservationId = reservationIdDto.ReservationId,
+                        Status = ReservationStatus.Canceled
+                    });
                 });
         }
     }

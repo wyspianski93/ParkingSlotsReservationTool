@@ -3,6 +3,5 @@
     public class ReservationIdDto
     {
         public Guid ReservationId { get; set; }
-        
     };
 }

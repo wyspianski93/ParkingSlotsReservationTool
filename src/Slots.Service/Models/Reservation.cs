@@ -6,6 +6,6 @@
 
         public ReservationPeriod ReservationPeriod { get; set; }
 
-        // public ReservationStatus ReservationStatus { get; set; }
+        public ReservationStatus ReservationStatus { get; set; }
     }
 }

@@ -16,7 +16,7 @@
                 return _eventsDictionary[eventName].EventType;
             }
 
-            throw new Exception("Event not registered.");
+            throw new Exception($"Event '{eventName}' is not registered.");
         }
 
         public IReadOnlyCollection<Type> GetEventHandlersTypesByEventName(string eventName)
@@ -26,7 +26,7 @@
                 return _eventsDictionary[eventName].EventHandlersTypes;
             }
 
-            throw new Exception("Event not registered.");
+            throw new Exception($"Event '{eventName}' is not registered.");
         }
 
         public void RegisterEvent(Type eventType, Type eventHandlerType)

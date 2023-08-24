@@ -19,11 +19,11 @@
             throw new Exception("Event not registered.");
         }
 
-        public Type GetEventHandlerTypeByEventName(string eventName)
+        public IReadOnlyCollection<Type> GetEventHandlersTypesByEventName(string eventName)
         {
             if (_eventsDictionary.ContainsKey(eventName))
             {
-                return _eventsDictionary[eventName].EventHandlerType;
+                return _eventsDictionary[eventName].EventHandlersTypes;
             }
 
             throw new Exception("Event not registered.");
@@ -31,7 +31,14 @@
 
         public void RegisterEvent(Type eventType, Type eventHandlerType)
         {
-            _eventsDictionary.Add(eventType.Name, new EventMetadata(eventType, eventHandlerType));
+            if (_eventsDictionary.TryGetValue(eventType.Name, out var eventMetadata))
+            {
+                eventMetadata.AddEventHandlerType(eventHandlerType);
+            }
+            else
+            {
+                _eventsDictionary.Add(eventType.Name, new EventMetadata(eventType, new List<Type>() { eventHandlerType }));
+            }
         }
     }
 }

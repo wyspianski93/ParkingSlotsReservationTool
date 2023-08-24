@@ -78,15 +78,18 @@ namespace EventBus
             var eventName = ea.RoutingKey;
             var eventType = _eventManager.GetEventTypeByName(eventName);
 
-            var eventHandlerType = _eventManager.GetEventHandlerTypeByEventName(eventName);
-            var eventHandlerObj = _serviceProvider.GetService(eventHandlerType);
-            var eventHandlerConcreteType = typeof(IEventHandler<>).MakeGenericType(eventType);
+            var eventHandlersTypes = _eventManager.GetEventHandlersTypesByEventName(eventName);
 
-            var eventObj = JsonSerializer.Deserialize(ea.Body.Span, eventType);
+            foreach (var eventHandlerType in eventHandlersTypes)
+            {
+                var eventHandlerObj = _serviceProvider.GetService(eventHandlerType);
+                var eventHandlerConcreteType = typeof(IEventHandler<>).MakeGenericType(eventType);
 
-            eventHandlerConcreteType
-                .GetMethod("Handle")
-                .Invoke(eventHandlerObj, new[] { eventObj as object });
+                var eventObj = JsonSerializer.Deserialize(ea.Body.Span, eventType);
+
+                eventHandlerConcreteType
+                    .GetMethod("Handle")?.Invoke(eventHandlerObj, new[] { eventObj as object });
+            }
         }
     }
 }

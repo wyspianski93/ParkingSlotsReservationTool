@@ -8,34 +8,34 @@ namespace Authentication.Service.Endpoints
     {
         public static void MapUsersEndpoint(this IEndpointRouteBuilder endpoint)
         {
-            endpoint.MapPost("/users/create", async (UserDto userDto, UserManager<User> userManager) =>
+            endpoint.MapPost("/users/create", async (UserCreateDto usg, UserManager<User> userManager) =>
             {
-                if (await userManager.FindByEmailAsync(userDto.Email) != null)
+                if (await userManager.FindByEmailAsync(usg.Email) != null)
                 {
-                    return Results.BadRequest($"User with e-mail '{userDto.Email}' already exists.");
+                    return Results.BadRequest($"User with e-mail '{usg.Email}' already exists.");
                 }
 
                 var user = new User
                 {
-                    UserName = userDto.Name,
-                    Email = userDto.Email
+                    UserName = usg.Name,
+                    Email = usg.Email
                 };
 
-                var createUserResult = await userManager.CreateAsync(user, userDto.Password);
+                var createUserResult = await userManager.CreateAsync(user, usg.Password);
 
                 if (!createUserResult.Succeeded)
                 {
-                    return Results.BadRequest($"Cannot create user with name '{userDto.Name}'. Errors: {string.Join("\n", createUserResult.Errors.Select(error => error.Description))}");
+                    return Results.BadRequest($"Cannot create user with name '{usg.Name}'. Errors: {string.Join("\n", createUserResult.Errors.Select(error => error.Description))}");
                 }
 
-                var addToRoleResult = await userManager.AddToRoleAsync(user, userDto.Role);
+                var addToRoleResult = await userManager.AddToRoleAsync(user, "SuperAdmin");
 
                 if (!addToRoleResult.Succeeded)
                 {
-                    return Results.BadRequest($"Cannot add role '{userDto.Role}' to user with name '{userDto.Name}'. Errors: {string.Join("\n", addToRoleResult.Errors.Select(error => error.Description))}");
+                    return Results.BadRequest($"Cannot add role 'SuperAdmin' to user with name '{usg.Name}'. Errors: {string.Join("\n", addToRoleResult.Errors.Select(error => error.Description))}");
                 }
 
-                return Results.Ok($"Created user '{userDto.Name}' and assigned role '{userDto.Role}'");
+                return Results.Ok($"Created user '{usg.Name}' and assigned role 'SuperAdmin'.");
             });
         }
     }

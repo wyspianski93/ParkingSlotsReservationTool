@@ -27,6 +27,8 @@ namespace Authentication.Service
             services.AddJwtAuthentication(_jwtConfig);
             services.AddAuthorization();
 
+            services.AddCors();
+
             services.AddSingleton<IMongoDbConfig>(_ => _mongoDbConfig);
             services.AddSingleton<IRepository, MongoRepository>();
             services.AddSingleton<IBsonSerializersRegistrant, CommonSerializersRegistrant>();
@@ -48,11 +50,19 @@ namespace Authentication.Service
 
             app.UseHttpsRedirection();
 
+            app.UseCors(builder =>
+            {
+                builder
+                    .WithOrigins("http://localhost:3000")
+                    .AllowAnyHeader()
+                    .AllowAnyMethod();
+            });
+
             app.UseEndpoints(endpoint =>
             {
                 endpoint.MapRolesEndpoint();
                 endpoint.MapUsersEndpoint();
-                endpoint.MapLoginEndpoint(_jwtConfig);
+                endpoint.MapSignInEndpoint(_jwtConfig);
 
                 endpoint.MapGet("/hello-world", [Authorize] (HttpContext
                 context) => Results.Ok("Hello world!"));

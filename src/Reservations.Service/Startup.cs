@@ -24,6 +24,8 @@ namespace Reservations.Service
             services.AddJwtAuthentication(_jwtConfig);
             services.AddAuthorization();
 
+            services.AddCors();
+
             services.AddHttpContextAccessor();
             services.AddSingleton<IMongoDbConfig>(_ => _mongoDbConfig);
             services.AddSingleton<IBsonSerializersRegistrant, CommonSerializersRegistrant>();
@@ -50,6 +52,14 @@ namespace Reservations.Service
             app.UseAuthorization();
 
             app.UseHttpsRedirection();
+
+            app.UseCors(builder =>
+            {
+                builder
+                    .WithOrigins("http://localhost:3000")
+                    .AllowAnyHeader()
+                    .AllowAnyMethod();
+            });
 
             app.UseEndpoints(endpoint =>
             {

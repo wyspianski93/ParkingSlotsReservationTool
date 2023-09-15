@@ -1,7 +1,5 @@
-﻿using EventBus;
-using Services.Common;
+﻿using Services.Common;
 using Slots.Service.Endpoints;
-using Slots.Service.Events;
 using Slots.Service.EventsHandlers;
 using Storage;
 using Storage.Serializing;
@@ -26,6 +24,8 @@ namespace Slots.Service
 
             services.AddJwtAuthentication(_jwtConfig);
             services.AddAuthorization();
+
+            services.AddCors();
 
             services.AddHttpContextAccessor();
             services.AddSingleton<IMongoDbConfig>(_ => _mongoDbConfig);
@@ -55,6 +55,14 @@ namespace Slots.Service
             app.UseAuthorization();
 
             app.UseHttpsRedirection();
+
+            app.UseCors(builder =>
+            {
+                builder
+                    .WithOrigins("http://localhost:3000")
+                    .AllowAnyHeader()
+                    .AllowAnyMethod();
+            });
 
             app.UseEndpoints(endpoint =>
             {

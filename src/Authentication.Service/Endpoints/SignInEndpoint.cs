@@ -9,20 +9,20 @@ using Services.Common;
 
 namespace Authentication.Service.Endpoints
 {
-    public static class LoginEndpoint
+    public static class SignInEndpoint
     {
-        public static void MapLoginEndpoint(this IEndpointRouteBuilder endpoint, JwtConfig jwtConfig)
+        public static void MapSignInEndpoint(this IEndpointRouteBuilder endpoint, JwtConfig jwtConfig)
         {
-            endpoint.MapPost("/login", async (UserDto userDto, UserManager<User> userManager) =>
+            endpoint.MapPost("/signin", async (UserSignInDto userSignIn, UserManager<User> userManager) =>
             {
-                var user = await userManager.FindByEmailAsync(userDto.Email);
+                var user = await userManager.FindByEmailAsync(userSignIn.Email);
 
                 if (user == null)
                 {
-                    return Results.BadRequest($"User {userDto.Email} does not exist.");
+                    return Results.BadRequest($"User {userSignIn.Email} does not exist.");
                 }
 
-                if (!await userManager.CheckPasswordAsync(user, userDto.Password))
+                if (!await userManager.CheckPasswordAsync(user, userSignIn.Password))
                 {
                     return Results.BadRequest("Password is incorrect.");
                 }
@@ -42,6 +42,7 @@ namespace Authentication.Service.Endpoints
                     audience: jwtConfig.Audience,
                     claims: claims,
                     signingCredentials: signingCredentials);
+
 
                 var token = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
 

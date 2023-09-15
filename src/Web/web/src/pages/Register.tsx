@@ -1,7 +1,8 @@
-import { Box, Button, TextField } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import { NavLink } from "react-router-dom";
+import { FormInputField } from "../components/FormInputField";
 import { register } from "../services/register";
 
 export function Register(): JSX.Element {
@@ -35,20 +36,9 @@ export function Register(): JSX.Element {
         }}
       >
         <br></br>
-        <TextField
-          sx={{ width: "40%", padding: "5px" }}
-          label={"Name"}
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-        <TextField
-          sx={{ width: "40%", padding: "5px" }}
-          label={"E-mail"}
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <TextField
-          sx={{ width: "40%", padding: "5px" }}
+        <FormInputField label={"Name"} value={name} onChange={(e) => setName(e.target.value)} />
+        <FormInputField label={"E-mail"} value={email} onChange={(e) => setEmail(e.target.value)} />
+        <FormInputField
           type={"password"}
           label={"Password"}
           value={password}

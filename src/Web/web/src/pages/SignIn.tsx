@@ -1,8 +1,9 @@
-import { Box, Button, TextField } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import { useState } from "react";
 import { Navigate, useNavigate } from "react-router";
 import { NavLink } from "react-router-dom";
 import { useRecoilState } from "recoil";
+import { FormInputField } from "../components/FormInputField";
 import { signIn } from "../services/signIn";
 import { userAuthorizationState } from "../state/userAuthorizationState";
 
@@ -40,29 +41,8 @@ export function SignIn(): JSX.Element {
       >
         <br></br>
 
-        <TextField
-          variant="outlined"
-          sx={{
-            width: "40%",
-            padding: "5px",
-            // "& .MuiFormLabel-root": {
-            //   color: "black",
-            //   paddingLeft: "5px",
-            // },
-            // "& .MuiOutlinedInput-root": {
-            //   "&.Mui-focused fieldset": {
-            //     borderColor: "black",
-            //   },
-            //   borderColor: "black",
-            // },
-          }}
-          label={"E-mail"}
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <TextField
-          variant="outlined"
-          sx={{ width: "40%", padding: "5px" }}
+        <FormInputField label={"E-mail"} value={email} onChange={(e) => setEmail(e.target.value)} />
+        <FormInputField
           type={"password"}
           label={"Password"}
           value={password}

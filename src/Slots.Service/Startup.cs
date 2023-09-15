@@ -38,7 +38,7 @@ namespace Slots.Service
 
             services.AddTransient<ReservationCreatedEventHandler>();
             services.AddTransient<ReservationStatusUpdatedEventHandler>();
-            services.AddEventBus("slots_service");
+            services.AddRabbitMqEventBus("slots_service");
         }
 
         public void Configure(IApplicationBuilder app,

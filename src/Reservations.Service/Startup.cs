@@ -33,7 +33,7 @@ namespace Reservations.Service
             services.AddSingleton<IRepository, MongoRepository>();
             services.AddScoped<IIdentityService, IdentityService>();
 
-            services.AddEventBus("reservations_service");
+            services.AddRabbitMqEventBus("reservations_service");
         }
 
         public void Configure(IApplicationBuilder app,

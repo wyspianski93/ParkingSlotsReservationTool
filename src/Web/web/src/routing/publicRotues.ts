@@ -2,13 +2,18 @@ import { Register } from "../pages/Register";
 import { SignIn } from "../pages/SignIn";
 import { Route } from "./route";
 
+export enum PublicRoutes {
+  SignIn = "/signin",
+  Register = "/register",
+}
+
 export const publicRoutes: Route[] = [
   {
-    path: "/signin",
+    path: PublicRoutes.SignIn,
     content: SignIn,
   },
   {
-    path: "/register",
+    path: PublicRoutes.Register,
     content: Register,
   },
 ];

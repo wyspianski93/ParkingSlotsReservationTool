@@ -1,12 +1,13 @@
 import { Navigate } from "react-router";
 import { useRecoilValue } from "recoil";
+import { PublicRoutes } from "../routing/publicRotues";
 import { userAuthorizationState } from "../state/userAuthorizationState";
 
-export function AuthorizedContent({ children }: { children: JSX.Element }): JSX.Element {
+export function AuthorizedPageContent({ children }: { children: JSX.Element }): JSX.Element {
   const { isAuthorized } = useRecoilValue(userAuthorizationState);
 
   if (!isAuthorized) {
-    return <Navigate to={"/signin"}></Navigate>;
+    return <Navigate to={PublicRoutes.SignIn}></Navigate>;
   }
 
   return children;

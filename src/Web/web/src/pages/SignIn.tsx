@@ -6,6 +6,7 @@ import { FormActionButton } from "../components/form/FormActionButton";
 import { FormErrorContainer } from "../components/form/FormErrorContainer";
 import { FormInputField } from "../components/form/FormInputField";
 import { FromNavigationLink } from "../components/form/FromNavigationLink";
+import { PublicRoutes } from "../routing/publicRotues";
 import { signIn } from "../services/signIn";
 import { userAuthorizationState } from "../state/userAuthorizationState";
 
@@ -17,7 +18,7 @@ export function SignIn(): JSX.Element {
   const [signInError, setSignInError] = useState("");
 
   if (userAuthorization.isAuthorized) {
-    return <Navigate to={"/home"} />;
+    return <Navigate to="/search" />;
   }
 
   return (
@@ -40,7 +41,7 @@ export function SignIn(): JSX.Element {
         }}
       />
       <FromNavigationLink
-        navigateTo="/register"
+        navigateTo={PublicRoutes.Register}
         navigationLabel="Register"
         helperLabel="Don't have an account?"
       />

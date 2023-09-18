@@ -1,11 +1,11 @@
-import { Divider, Typography, styled } from "@mui/material";
+import { Divider, styled } from "@mui/material";
 import { Outlet } from "react-router";
+import { Menu } from "../components/menu/Menu";
 
 export function Layout(): JSX.Element {
   return (
     <StyledLayout>
-      <TopMenu />
-      <br></br>
+      <Menu />
       <Divider></Divider>
       <Outlet></Outlet>
     </StyledLayout>
@@ -18,11 +18,3 @@ const StyledLayout = styled("div")(({ theme }) => ({
   marginLeft: "auto",
   marginRight: "auto",
 }));
-
-function TopMenu(): JSX.Element {
-  return (
-    <Typography sx={{ padding: "5px", paddingTop: "10px" }} variant="h4">
-      PARKING SLOTS RESERVATIONS
-    </Typography>
-  );
-}

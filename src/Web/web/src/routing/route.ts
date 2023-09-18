@@ -1,1 +1,4 @@
-export type Route = { path: string; content: () => JSX.Element };
+export interface Route {
+  path: string;
+  content: () => JSX.Element;
+}

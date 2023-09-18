@@ -5,6 +5,7 @@ import { FormActionButton } from "../components/form/FormActionButton";
 import { FormErrorContainer } from "../components/form/FormErrorContainer";
 import { FormInputField } from "../components/form/FormInputField";
 import { FromNavigationLink } from "../components/form/FromNavigationLink";
+import { PublicRoutes } from "../routing/publicRotues";
 import { register } from "../services/register";
 
 export function Register(): JSX.Element {
@@ -16,7 +17,7 @@ export function Register(): JSX.Element {
   const [hasRegistered, setHasRegistered] = useState(false);
 
   if (hasRegistered) {
-    return <Navigate to={"/signin"} />;
+    return <Navigate to={PublicRoutes.SignIn} />;
   }
 
   return (
@@ -40,7 +41,7 @@ export function Register(): JSX.Element {
         }}
       />
       <FromNavigationLink
-        navigateTo="/signin"
+        navigateTo={PublicRoutes.SignIn}
         helperLabel="Already have an account?"
         navigationLabel="Sign in"
       />

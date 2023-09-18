@@ -9,8 +9,8 @@ import {
 } from "react-router-dom";
 import { RecoilRoot } from "recoil";
 import "./index.css";
-import { AuthorizedContent } from "./pages/AuthorizedContent";
 import { Layout } from "./pages/Layout";
+import { SignIn } from "./pages/SignIn";
 import { authorizedRoutes } from "./routing/authorizedRoutes";
 import { publicRoutes } from "./routing/publicRotues";
 import { theme } from "./theme";
@@ -21,19 +21,12 @@ const router = createBrowserRouter(
   createRoutesFromElements([
     <Route element={<Layout />}>
       {publicRoutes.map((publicRoute) => (
-        <Route path={publicRoute.path} element={<publicRoute.content />}></Route>
+        <Route path={publicRoute.path} element={<publicRoute.content />} />
       ))}
-      ,
       {authorizedRoutes.map((authorizedRoute) => (
-        <Route
-          path={authorizedRoute.path}
-          element={
-            <AuthorizedContent>
-              <authorizedRoute.content></authorizedRoute.content>
-            </AuthorizedContent>
-          }
-        />
+        <Route path={authorizedRoute.path} element={<authorizedRoute.content />} />
       ))}
+      <Route path="*" element={<SignIn />} />
     </Route>,
   ]),
 );

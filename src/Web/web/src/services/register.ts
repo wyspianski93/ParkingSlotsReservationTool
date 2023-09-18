@@ -14,14 +14,13 @@ export async function register(
       body: JSON.stringify({ email, password, name }),
     });
   } catch (e) {
-    const errorMessage = `Could not connect to registering service.`;
-    throw Error(errorMessage);
+    return { isRegistered: false, error: "Could not connect to registering service." };
   }
 
   const registeringResult = await response.text();
 
   if (response.status != 200) {
-    return { isRegistered: false, error: registeringResult };
+    return { isRegistered: false, error: "Error occured." };
   }
 
   return { isRegistered: true, error: "" };

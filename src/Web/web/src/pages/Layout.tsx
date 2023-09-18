@@ -15,6 +15,8 @@ export function Layout(): JSX.Element {
 const StyledLayout = styled("div")(({ theme }) => ({
   backgroundColor: theme.palette.primary.main,
   height: "100%",
+  marginLeft: "auto",
+  marginRight: "auto",
 }));
 
 function TopMenu(): JSX.Element {

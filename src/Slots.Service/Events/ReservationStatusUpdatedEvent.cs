@@ -1,5 +1,4 @@
-﻿using System.Runtime.InteropServices.JavaScript;
-using EventBus;
+﻿using EventBus;
 using Slots.Service.Models;
 
 namespace Slots.Service.Events

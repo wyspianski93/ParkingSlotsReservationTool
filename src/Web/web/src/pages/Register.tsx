@@ -1,73 +1,50 @@
-import { Box, Button } from "@mui/material";
 import { useState } from "react";
-import { useNavigate } from "react-router";
-import { NavLink } from "react-router-dom";
-import { FormInputField } from "../components/FormInputField";
+import { Navigate } from "react-router";
+import { Form } from "../components/form/Form";
+import { FormActionButton } from "../components/form/FormActionButton";
+import { FormErrorContainer } from "../components/form/FormErrorContainer";
+import { FormInputField } from "../components/form/FormInputField";
+import { FromNavigationLink } from "../components/form/FromNavigationLink";
 import { register } from "../services/register";
 
 export function Register(): JSX.Element {
-  const navigate = useNavigate();
-
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
   const [registrationError, setRegistrationError] = useState("");
 
-  return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "space-between",
-        alignItems: "center",
-        paddingTop: "10px",
-      }}
-    >
-      <Box
-        sx={{
-          backgroundColor: "#primary",
-          border: "2px black solid",
-          borderRadius: "25px",
-          display: "flex",
-          flexDirection: "column",
-          width: "40%",
-          alignItems: "center",
-        }}
-      >
-        <br></br>
-        <FormInputField label={"Name"} value={name} onChange={(e) => setName(e.target.value)} />
-        <FormInputField label={"E-mail"} value={email} onChange={(e) => setEmail(e.target.value)} />
-        <FormInputField
-          type={"password"}
-          label={"Password"}
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <Button
-          color="secondary"
-          sx={{ width: "40%", padding: "5px" }}
-          onClick={async () => {
-            const { isRegistered, error } = await register(name, email, password);
-            if (isRegistered) {
-              navigate("/signin");
-            }
-            setRegistrationError(error);
-          }}
-        >
-          Register
-        </Button>
-        <NavLink style={{ color: "black", width: "40%", padding: "5px" }} to={"/signin"}>
-          <Button color={"secondary"} sx={{ width: "100%", padding: "5px" }}>
-            Already have the account? Sign in
-          </Button>
-        </NavLink>
-        {registrationError != "" && <RegistrationErrorContainer error={registrationError} />}
-      </Box>
-    </div>
-  );
-}
+  const [hasRegistered, setHasRegistered] = useState(false);
 
-function RegistrationErrorContainer({ error }: { error: string }): JSX.Element {
-  return <span style={{ width: "95%", padding: "5px" }}>{error}</span>;
+  if (hasRegistered) {
+    return <Navigate to={"/signin"} />;
+  }
+
+  return (
+    <Form>
+      <FormInputField label={"Name"} value={name} onChange={(e) => setName(e.target.value)} />
+      <FormInputField label={"E-mail"} value={email} onChange={(e) => setEmail(e.target.value)} />
+      <FormInputField
+        type={"password"}
+        label={"Password"}
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+      />
+      <FormActionButton
+        label={"Register"}
+        onClick={async () => {
+          const { isRegistered, error } = await register(name, email, password);
+          if (isRegistered) {
+            setHasRegistered(true);
+          }
+          setRegistrationError(error);
+        }}
+      />
+      <FromNavigationLink
+        navigateTo="/signin"
+        helperLabel="Already have an account?"
+        navigationLabel="Sign in"
+      />
+      {registrationError != "" && <FormErrorContainer error={registrationError} />}
+    </Form>
+  );
 }

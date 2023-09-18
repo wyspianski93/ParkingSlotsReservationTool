@@ -1,72 +1,50 @@
-import { Box, Button } from "@mui/material";
 import { useState } from "react";
-import { Navigate, useNavigate } from "react-router";
-import { NavLink } from "react-router-dom";
+import { Navigate } from "react-router";
 import { useRecoilState } from "recoil";
-import { FormInputField } from "../components/FormInputField";
+import { Form } from "../components/form/Form";
+import { FormActionButton } from "../components/form/FormActionButton";
+import { FormErrorContainer } from "../components/form/FormErrorContainer";
+import { FormInputField } from "../components/form/FormInputField";
+import { FromNavigationLink } from "../components/form/FromNavigationLink";
 import { signIn } from "../services/signIn";
 import { userAuthorizationState } from "../state/userAuthorizationState";
 
 export function SignIn(): JSX.Element {
   const [userAuthorization, setUserAuthorization] = useRecoilState(userAuthorizationState);
 
-  const navigate = useNavigate();
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [signInError, setSignInError] = useState("");
 
   if (userAuthorization.isAuthorized) {
     return <Navigate to={"/home"} />;
   }
 
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "space-between",
-        alignItems: "center",
-        paddingTop: "10px",
-      }}
-    >
-      <Box
-        sx={{
-          border: "2px black solid",
-          borderRadius: "25px",
-          display: "flex",
-          flexDirection: "column",
-          width: "40%",
-          alignItems: "center",
+    <Form>
+      <FormInputField label={"E-mail"} value={email} onChange={(e) => setEmail(e.target.value)} />
+      <FormInputField
+        type={"password"}
+        label={"Password"}
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+      />
+      <FormActionButton
+        label={"Sign in"}
+        onClick={async () => {
+          const { isAuthorized, token, error } = await signIn(email, password);
+          if (isAuthorized) {
+            setUserAuthorization({ isAuthorized: isAuthorized, token: token });
+          }
+          setSignInError(error);
         }}
-      >
-        <br></br>
-
-        <FormInputField label={"E-mail"} value={email} onChange={(e) => setEmail(e.target.value)} />
-        <FormInputField
-          type={"password"}
-          label={"Password"}
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <Button
-          color={"secondary"}
-          sx={{ width: "40%", padding: "5px" }}
-          onClick={async () => {
-            const { isAuthorized, token } = await signIn(email, password);
-            if (isAuthorized) {
-              setUserAuthorization({ isAuthorized: isAuthorized, token: token });
-              navigate("/home");
-            }
-          }}
-        >
-          Sign in
-        </Button>
-        <NavLink style={{ color: "black", width: "40%", padding: "5px" }} to={"/register"}>
-          <Button color={"secondary"} sx={{ width: "100%", padding: "5px" }}>
-            Don't have an acount? Register
-          </Button>
-        </NavLink>
-      </Box>
-    </div>
+      />
+      <FromNavigationLink
+        navigateTo="/register"
+        navigationLabel="Register"
+        helperLabel="Don't have an account?"
+      />
+      {signInError != "" && <FormErrorContainer error={signInError} />}
+    </Form>
   );
 }

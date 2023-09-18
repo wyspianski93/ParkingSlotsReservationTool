@@ -1,7 +1,7 @@
 export async function signIn(
   email: string,
   password: string,
-): Promise<{ isAuthorized: boolean; token: string }> {
+): Promise<{ isAuthorized: boolean; token: string; error: string }> {
   const requestUrl = "http://localhost:7132/signin";
 
   let response: Response;
@@ -13,15 +13,14 @@ export async function signIn(
       body: JSON.stringify({ email, password }),
     });
   } catch (e) {
-    const errorMessage = `Could not connect to signing service.`;
-    throw Error(errorMessage);
+    return { isAuthorized: false, token: "", error: "Could not connect to signing service." };
   }
 
   if (response.status != 200) {
-    return { isAuthorized: false, token: "" };
+    return { isAuthorized: false, token: "", error: "Error occured." };
   }
 
   const token = await response.json();
 
-  return { isAuthorized: true, token: token as string };
+  return { isAuthorized: true, token: token as string, error: "" };
 }

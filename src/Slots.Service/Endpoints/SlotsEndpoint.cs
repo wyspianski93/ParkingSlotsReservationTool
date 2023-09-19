@@ -9,6 +9,14 @@ namespace Slots.Service.Endpoints
     {
         public static void MapSlotsEndpoint(this IEndpointRouteBuilder endpoint)
         {
+            endpoint.MapGet(
+                "/slots", [Authorize] async (ISlotsRepository slotsRepository) =>
+                {
+                    var slots = await slotsRepository.GetSlotsAsync().ConfigureAwait(false);
+
+                    return Results.Ok(slots);
+                });
+
             endpoint.MapPost(
                 "/slots/create",
                 [Authorize]

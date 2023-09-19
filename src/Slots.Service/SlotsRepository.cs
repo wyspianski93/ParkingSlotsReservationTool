@@ -5,6 +5,8 @@ namespace Slots.Service
 {
     public interface ISlotsRepository
     {
+        Task<IReadOnlyCollection<Slot>> GetSlotsAsync();
+
         Task AddSlotAsync(Slot slot);
 
         Task UpdateSlotReservationsAsync(Guid slotId, Reservation reservation);
@@ -21,6 +23,11 @@ namespace Slots.Service
         public SlotsRepository(IRepository repository)
         {
             _repository = repository;
+        }
+
+        public async Task<IReadOnlyCollection<Slot>> GetSlotsAsync()
+        {
+            return await _repository.GetAllAsync<Slot>().ConfigureAwait(false);
         }
 
         public async Task AddSlotAsync(Slot slot)

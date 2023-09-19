@@ -7,7 +7,7 @@ export function MenuItems(): JSX.Element {
   const { isAuthorized } = useRecoilValue(userAuthorizationState);
 
   return (
-    <div style={{ display: "flex", flexDirection: "row" }}>
+    <div style={{ display: "flex", flexDirection: "row", padding: "5px" }}>
       {isAuthorized &&
         authorizedRoutes.map((authorizedRoute) => (
           <MenuItem

@@ -18,6 +18,11 @@ namespace Storage
             serializersRegistrantRunner.RunRegistrants();
         }
 
+        public async Task<IReadOnlyCollection<TItem>> GetAllAsync<TItem>()
+        {
+            return await Collection<TItem>().AsQueryable().ToListAsync().ConfigureAwait(false);
+        }
+
         public async Task AddAsync<TItem>(TItem item)
         {
             await Collection<TItem>().InsertOneAsync(item);

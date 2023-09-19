@@ -22,6 +22,7 @@ specifiers:
   react-router-dom: ^6.15.0
   react-scripts: 5.0.1
   recoil: ^0.7.7
+  recoil-nexus: ^0.5.0
   typescript: ^4.9.5
   web-vitals: ^2.1.4
 
@@ -44,6 +45,7 @@ dependencies:
   react-router-dom: 6.15.0_biqbaboplfbrettd7655fr4n2y
   react-scripts: 5.0.1_vngmkxqfr7z6omkr24f5xzq6dm
   recoil: 0.7.7_biqbaboplfbrettd7655fr4n2y
+  recoil-nexus: 0.5.0_iu4jznbqnhmihcwug3xtovdo5e
   typescript: 4.9.5
   web-vitals: 2.1.4
 
@@ -9046,6 +9048,22 @@ packages:
     engines: {node: '>=8.10.0'}
     dependencies:
       picomatch: 2.3.1
+    dev: false
+
+  /recoil-nexus/0.5.0_iu4jznbqnhmihcwug3xtovdo5e:
+    resolution: {integrity: sha512-I2qerncPPmTPhFi0V/q2ebwKrRq9UXqZf30xoNUYLCZnjwxsusbfZKHICULVxjOhIJ3nkU2xrnVjdfVjKaYLEQ==}
+    peerDependencies:
+      '@types/react': '>=16.8.0'
+      react: '>=16.8.0'
+      react-dom: '>=16.8.0'
+      recoil: '>=0.2.0'
+      typescript: '>=4.1.0'
+    dependencies:
+      '@types/react': 18.2.21
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+      recoil: 0.7.7_biqbaboplfbrettd7655fr4n2y
+      typescript: 4.9.5
     dev: false
 
   /recoil/0.7.7_biqbaboplfbrettd7655fr4n2y:

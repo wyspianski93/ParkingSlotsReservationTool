@@ -22,11 +22,13 @@ namespace Services.Common
                 {
                     ValidateIssuer = false,
                     ValidateAudience = false,
+                    ValidateLifetime = true,
                     ValidAudience = jwtConfig.Audience,
                     ValidIssuer = jwtConfig.Issuer,
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtConfig.Key)),
                     ValidateIssuerSigningKey = true,
-                    RequireExpirationTime = false
+                    RequireExpirationTime = true,
+                    ClockSkew = TimeSpan.Zero
                 };
             });
         }

@@ -1,23 +1,23 @@
 import { useState } from "react";
 import { Navigate } from "react-router";
-import { useRecoilState } from "recoil";
+import { useRecoilValue } from "recoil";
 import { Form } from "../components/form/Form";
 import { FormActionButton } from "../components/form/FormActionButton";
 import { FormErrorContainer } from "../components/form/FormErrorContainer";
 import { FormInputField } from "../components/form/FormInputField";
 import { FromNavigationLink } from "../components/form/FromNavigationLink";
 import { PublicRoutes } from "../routing/publicRotues";
-import { signIn } from "../services/signIn";
+import { authService } from "../services/auth";
 import { userAuthorizationState } from "../state/userAuthorizationState";
 
 export function SignIn(): JSX.Element {
-  const [userAuthorization, setUserAuthorization] = useRecoilState(userAuthorizationState);
+  const { isAuthorized } = useRecoilValue(userAuthorizationState);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [signInError, setSignInError] = useState("");
 
-  if (userAuthorization.isAuthorized) {
+  if (isAuthorized) {
     return <Navigate to="/search" />;
   }
 
@@ -33,11 +33,10 @@ export function SignIn(): JSX.Element {
       <FormActionButton
         label={"Sign in"}
         onClick={async () => {
-          const { isAuthorized, token, error } = await signIn(email, password);
-          if (isAuthorized) {
-            setUserAuthorization({ isAuthorized: isAuthorized, token: token });
+          const { error } = await authService.authorize(email, password);
+          if (error) {
+            setSignInError(error);
           }
-          setSignInError(error);
         }}
       />
       <FromNavigationLink

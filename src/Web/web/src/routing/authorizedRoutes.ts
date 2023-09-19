@@ -18,7 +18,7 @@ export class AuthorizedRoute implements MenuAccessibleRoute {
     this.icon = init?.icon ?? throwError("Icon cannot be null.");
 
     if (init?.content === undefined) {
-      throw new Error("Content must be specified.");
+      throw new Error("Content cannot be null.");
     }
 
     this.content = () => AuthorizedPageContent({ children: init!.content!() });

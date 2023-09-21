@@ -18,7 +18,7 @@ export function SignIn(): JSX.Element {
   const [signInError, setSignInError] = useState("");
 
   if (isAuthorized) {
-    return <Navigate to="/search" />;
+    return <Navigate to="/slots" />;
   }
 
   return (

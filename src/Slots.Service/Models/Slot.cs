@@ -1,7 +1,4 @@
-﻿using MongoDB.Bson.Serialization.Serializers;
-using MongoDB.Bson.Serialization;
-
-namespace Slots.Service.Models
+﻿namespace Slots.Service.Models
 {
     public class Slot
     {
@@ -10,6 +7,8 @@ namespace Slots.Service.Models
         public string Name { get; set; }
 
         public Guid OwnerId { get; set; }
+
+        public string OwnerName { get; set; }
 
         public IReadOnlyCollection<AvailabilityPeriod> AvailabilityPeriods { get; set; }
 

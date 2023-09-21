@@ -33,7 +33,7 @@ namespace Authentication.Service.Endpoints
 
                 var claims = roles
                     .Select(role => new Claim(ClaimTypes.Role, role))
-                    .Union(new List<Claim>() { new(ClaimsConstants.UserId, user.Id.ToString()) }).ToList();
+                    .Union(new List<Claim>() { new(ClaimsConstants.UserId, user.Id.ToString()), new(ClaimsConstants.UserName, user.UserName) }).ToList();
 
                 var token = CreateToken(claims, jwtConfig);
                 var refreshToken = GenerateRefreshToken();
@@ -83,7 +83,7 @@ namespace Authentication.Service.Endpoints
             var tokenOptions = new JwtSecurityToken(
                 issuer: jwtConfig.Issuer,
                 audience: jwtConfig.Audience,
-                expires: DateTime.Now.AddMinutes(15),
+                expires: DateTime.Now.AddDays(20), //DateTime.Now.AddMinutes(15),
                 claims: claims,
                 signingCredentials: signingCredentials);
 

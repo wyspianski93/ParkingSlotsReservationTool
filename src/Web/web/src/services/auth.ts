@@ -11,6 +11,10 @@ class AuthService {
   private accessToken: string | undefined;
   private refreshToken: string | undefined;
 
+  constructor() {
+    this.setTokenAutoRefresh = this.setTokenAutoRefresh.bind(this);
+  }
+
   public setTokens(accessToken: string, refreshToken: string) {
     this.accessToken = accessToken;
     this.refreshToken = refreshToken;
@@ -29,14 +33,15 @@ class AuthService {
     return error;
   }
 
-  setTokenAutoRefresh() {
-    const refresh = async () =>
-      this.authorizeInternal(
+  public setTokenAutoRefresh() {
+    const refresh = async () => {
+      await this.authorizeInternal(
         "refresh-token",
         JSON.stringify({ accessToken: this.accessToken, refreshToken: this.refreshToken }),
       );
+    };
 
-    setInterval(refresh, 10800000);
+    setInterval(refresh, 300000);
   }
 
   async authorizeInternal(
@@ -68,8 +73,7 @@ class AuthService {
 
     setRecoil(userAuthorizationState, { isAuthorized: true, roles: [] });
 
-    this.accessToken = token.accessToken;
-    this.refreshToken = token.refreshToken;
+    this.setTokens(token.accessToken, token.refreshToken);
 
     isAuthorizedCallback && isAuthorizedCallback();
 

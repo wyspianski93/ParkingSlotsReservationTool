@@ -1,6 +1,6 @@
 import { LocalParking, Mail, Search, SvgIconComponent } from "@material-ui/icons";
 import { AuthorizedPageContent } from "../pages/AuthorizedPageContent";
-import { SlotSearch } from "../pages/SlotSearch";
+import { Slots } from "../pages/Slots";
 import { UserReservations } from "../pages/UserReservations";
 import { UserSlots } from "../pages/UserSlots";
 import { throwError } from "../utils/throwError";
@@ -27,8 +27,8 @@ export class AuthorizedRoute implements MenuAccessibleRoute {
 
 export const authorizedRoutes: AuthorizedRoute[] = [
   new AuthorizedRoute({
-    path: "/search",
-    content: SlotSearch,
+    path: "/slots",
+    content: Slots,
     icon: Search,
     name: "Reserve a slot",
   }),
@@ -39,7 +39,7 @@ export const authorizedRoutes: AuthorizedRoute[] = [
     name: "My reservations",
   }),
   new AuthorizedRoute({
-    path: "/slots",
+    path: "/user-slots",
     content: UserSlots,
     icon: LocalParking,
     name: "My slots",

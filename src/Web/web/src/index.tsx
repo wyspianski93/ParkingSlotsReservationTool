@@ -1,5 +1,5 @@
 import { ThemeProvider } from "@mui/material";
-import React from "react";
+import React, { Suspense } from "react";
 import ReactDOM from "react-dom/client";
 import {
   Route,
@@ -10,8 +10,11 @@ import {
 import { RecoilRoot } from "recoil";
 import RecoilNexus from "recoil-nexus";
 import "./index.css";
+import { AuthorizedPageContent } from "./pages/AuthorizedPageContent";
+import BaseViewPaper from "./pages/BaseViewPaper";
 import { Layout } from "./pages/Layout";
 import { SignIn } from "./pages/SignIn";
+import { Slot } from "./pages/Slot";
 import { authorizedRoutes } from "./routing/authorizedRoutes";
 import { publicRoutes } from "./routing/publicRotues";
 import { theme } from "./theme";
@@ -25,8 +28,26 @@ const router = createBrowserRouter(
         <Route path={publicRoute.path} element={<publicRoute.content />} />
       ))}
       {authorizedRoutes.map((authorizedRoute) => (
-        <Route path={authorizedRoute.path} element={<authorizedRoute.content />} />
+        <Route
+          path={authorizedRoute.path}
+          element={
+            <Suspense fallback={<BaseViewPaper>Loading</BaseViewPaper>}>
+              <AuthorizedPageContent>
+                <authorizedRoute.content></authorizedRoute.content>
+              </AuthorizedPageContent>
+            </Suspense>
+          }
+        />
       ))}
+      {/* MOVE TO AUTH ROUTES  */}
+      <Route
+        path="/slots/:slotId"
+        element={
+          <Suspense fallback={<BaseViewPaper>Loading</BaseViewPaper>}>
+            <Slot />
+          </Suspense>
+        }
+      ></Route>
       <Route path="*" element={<SignIn />} />
     </Route>,
   ]),

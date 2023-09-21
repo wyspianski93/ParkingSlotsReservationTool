@@ -17,12 +17,21 @@ namespace Slots.Service.Endpoints
                     return Results.Ok(slots);
                 });
 
+            endpoint.MapGet(
+                "/slots/{id}", [Authorize] async (ISlotsRepository slotsRepository, string id) =>
+                {
+                    var slot = await slotsRepository.GetSlotAsync(id).ConfigureAwait(false);
+
+                    return Results.Ok(slot);
+                });
+
             endpoint.MapPost(
                 "/slots/create",
                 [Authorize]
                 async (SlotDto slotDto, ISlotsRepository slotsRepository, IIdentityService identityService) =>
                 {
                     var userId = identityService.GetUserId();
+                    var userName = identityService.GetUserName();
 
                     var slotWithNameExists = await slotsRepository.CheckSlotExistsAsync(slotDto.Name);
                     
@@ -35,6 +44,7 @@ namespace Slots.Service.Endpoints
                     {
                         Id = Guid.NewGuid(),
                         OwnerId = Guid.Parse(userId ?? string.Empty),
+                        OwnerName = userName ?? string.Empty,
                         Name = slotDto.Name,
                         AvailabilityPeriods = slotDto
                             .AvailabilityPeriods

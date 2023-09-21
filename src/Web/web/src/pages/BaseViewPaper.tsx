@@ -2,7 +2,7 @@ import { Paper } from "@mui/material";
 import { ReactNode } from "react";
 import styles from "../styles.module.css";
 
-export function BaseViewPaper({ children }: { children: ReactNode }): JSX.Element {
+export default function BaseViewPaper({ children }: { children: ReactNode }): JSX.Element {
   return (
     <Paper
       elevation={5}
@@ -12,6 +12,7 @@ export function BaseViewPaper({ children }: { children: ReactNode }): JSX.Elemen
         height: "80%",
         margin: "auto",
         marginTop: "10px",
+        overflowY: "auto",
       }}
     >
       {children}

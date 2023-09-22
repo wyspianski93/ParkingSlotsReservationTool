@@ -6,7 +6,7 @@ import { FormActionButton } from "../components/form/FormActionButton";
 import { FormErrorContainer } from "../components/form/FormErrorContainer";
 import { FormInputField } from "../components/form/FormInputField";
 import { FromNavigationLink } from "../components/form/FromNavigationLink";
-import { PublicRoutes } from "../routing/publicRotues";
+import { PublicRoutes } from "../routing/routes";
 import { authService } from "../services/auth";
 import { userAuthorizationState } from "../state/userAuthorizationState";
 

@@ -1,47 +1,18 @@
-import { LocalParking, Mail, Search, SvgIconComponent } from "@material-ui/icons";
 import { AuthorizedPageContent } from "../pages/AuthorizedPageContent";
-import { Slots } from "../pages/Slots";
-import { UserReservations } from "../pages/UserReservations";
-import { UserSlots } from "../pages/UserSlots";
 import { throwError } from "../utils/throwError";
-import { MenuAccessibleRoute } from "./menuAccessibleRoute";
+import { Route } from "./route";
 
-export class AuthorizedRoute implements MenuAccessibleRoute {
+export class AuthorizedRoute implements Route {
   public path: string;
-  public name: string;
-  public icon: SvgIconComponent;
   public content: () => JSX.Element;
 
-  public constructor(init?: Partial<AuthorizedRoute>) {
-    this.path = init?.path ?? throwError("Path cannot be null.");
-    this.name = init?.name ?? throwError("Name cannot be null.");
-    this.icon = init?.icon ?? throwError("Icon cannot be null.");
+  public constructor({ path, content }: { path?: string; content?: () => JSX.Element }) {
+    this.path = path ?? throwError("Path cannot be null.");
 
-    if (init?.content === undefined) {
+    if (content === undefined) {
       throw new Error("Content cannot be null.");
     }
 
-    this.content = () => AuthorizedPageContent({ children: init!.content!() });
+    this.content = () => AuthorizedPageContent({ children: content() });
   }
 }
-
-export const authorizedRoutes: AuthorizedRoute[] = [
-  new AuthorizedRoute({
-    path: "/slots",
-    content: Slots,
-    icon: Search,
-    name: "Reserve a slot",
-  }),
-  new AuthorizedRoute({
-    path: "/reservations",
-    content: UserReservations,
-    icon: Mail,
-    name: "My reservations",
-  }),
-  new AuthorizedRoute({
-    path: "/user-slots",
-    content: UserSlots,
-    icon: LocalParking,
-    name: "My slots",
-  }),
-];

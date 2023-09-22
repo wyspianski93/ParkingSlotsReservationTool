@@ -14,9 +14,7 @@ import { AuthorizedPageContent } from "./pages/AuthorizedPageContent";
 import BaseViewPaper from "./pages/BaseViewPaper";
 import { Layout } from "./pages/Layout";
 import { SignIn } from "./pages/SignIn";
-import { Slot } from "./pages/Slot";
-import { authorizedRoutes } from "./routing/authorizedRoutes";
-import { publicRoutes } from "./routing/publicRotues";
+import { authorizedRoutes, publicRoutes } from "./routing/routes";
 import { theme } from "./theme";
 
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
@@ -39,15 +37,6 @@ const router = createBrowserRouter(
           }
         />
       ))}
-      {/* MOVE TO AUTH ROUTES  */}
-      <Route
-        path="/slots/:slotId"
-        element={
-          <Suspense fallback={<BaseViewPaper>Loading</BaseViewPaper>}>
-            <Slot />
-          </Suspense>
-        }
-      ></Route>
       <Route path="*" element={<SignIn />} />
     </Route>,
   ]),

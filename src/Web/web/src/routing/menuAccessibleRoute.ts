@@ -1,6 +1,6 @@
 import { SvgIconComponent } from "@material-ui/icons";
 import { throwError } from "../utils/throwError";
-import { AuthorizedRoute } from "./authorizedRoutes";
+import { AuthorizedRoute } from "./authorizedRoute";
 
 export class MenuAccessibleRoute extends AuthorizedRoute {
   public icon: SvgIconComponent;

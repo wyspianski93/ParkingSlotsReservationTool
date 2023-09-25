@@ -11,6 +11,12 @@ namespace Reservations.Service.Endpoints
     {
         public static void MapReservationsEndpoint(this IEndpointRouteBuilder endpoint)
         {
+            endpoint.MapGet("/reservations",
+                [Authorize] async (HttpContextBindedReservationFilter reservationFilters, IIdentityService identityService, IReservationsRepository reservationsRepository) =>
+                {
+                    return await reservationsRepository.GetReservations(reservationFilters.Filters).ConfigureAwait(false);
+                });
+
             endpoint.MapPost(
                 "/reservations/create",
                 [Authorize]
@@ -40,27 +46,31 @@ namespace Reservations.Service.Endpoints
                 });
 
             endpoint.MapPost(
-                "/reservation/accept",
+                "/reservations/{reservationId}/accept",
                 [Authorize]
-                async(ReservationIdDto reservationIdDto, IReservationsRepository reservationsRepository, IEventBus eventBus) =>
+                async(string reservationId, IReservationsRepository reservationsRepository, IEventBus eventBus) =>
                 {
                     await reservationsRepository
-                        .UpdateReservationStatusAsync(reservationIdDto.ReservationId, ReservationStatus.Confirmed).ConfigureAwait(false);
+                        .UpdateReservationStatusAsync(Guid.Parse(reservationId), ReservationStatus.Confirmed).ConfigureAwait(false);
 
                     eventBus.Publish(
-                        new ReservationStatusUpdatedEvent(reservationIdDto.ReservationId, ReservationStatus.Confirmed));
+                        new ReservationStatusUpdatedEvent(Guid.Parse(reservationId), ReservationStatus.Confirmed));
+
+                    return Results.Ok($"Reservation '{reservationId}' accepted.");
                 });
 
             endpoint.MapPost(
-                "/reservation/cancel",
+                "/reservations/{reservationId}/cancel",
                 [Authorize]
-                async (ReservationIdDto reservationIdDto, IReservationsRepository reservationsRepository, IEventBus eventBus) =>
+                async (string reservationId, IReservationsRepository reservationsRepository, IEventBus eventBus) =>
                 {
                     await reservationsRepository
-                        .UpdateReservationStatusAsync(reservationIdDto.ReservationId, ReservationStatus.Canceled).ConfigureAwait(false);
+                        .UpdateReservationStatusAsync(Guid.Parse(reservationId), ReservationStatus.Canceled).ConfigureAwait(false);
 
                     eventBus.Publish(
-                        new ReservationStatusUpdatedEvent(reservationIdDto.ReservationId, ReservationStatus.Canceled));
+                        new ReservationStatusUpdatedEvent(Guid.Parse(reservationId), ReservationStatus.Canceled));
+
+                    return Results.Ok($"Reservation '{reservationId}' canceled.");
                 });
         }
     }

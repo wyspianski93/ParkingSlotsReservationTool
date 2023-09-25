@@ -1,3 +1,4 @@
+import jwtDecode from "jwt-decode";
 import { setRecoil } from "recoil-nexus";
 import { userAuthorizationState } from "../state/userAuthorizationState";
 
@@ -22,6 +23,16 @@ class AuthService {
 
   public getAccessToken() {
     return this.accessToken;
+  }
+
+  public getUserId() {
+    if (this.accessToken === undefined) {
+      return "";
+    }
+
+    const decoded = jwtDecode<{ userName: string; userId: string }>(this.accessToken);
+
+    return decoded.userId ?? "";
   }
 
   public async authorize(email: string, password: string): Promise<{ error: string | undefined }> {

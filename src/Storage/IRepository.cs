@@ -10,6 +10,8 @@ namespace Storage
 
         public Task<TItem> FindAsync<TItem>(Expression<Func<TItem, bool>> itemFinder);
 
+        Task<IReadOnlyCollection<TItem>> FindAllAsync<TItem>(IReadOnlyCollection<IFilter<TItem>> filters);
+
         public Task UpdateOneAsync<TItem, TField>(Expression<Func<TItem, bool>> itemFinder,
             Expression<Func<TItem, TField>> fieldSelector, TField fieldValue);
     }

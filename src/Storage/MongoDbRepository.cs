@@ -33,6 +33,18 @@ namespace Storage
             return await Collection<TItem>().AsQueryable().FirstOrDefaultAsync(itemFinder, CancellationToken.None).ConfigureAwait(false);
         }
 
+        public async Task<IReadOnlyCollection<TItem>> FindAllAsync<TItem>(IReadOnlyCollection<IFilter<TItem>> filters)
+        {
+            var filterDefinition = FilterDefinition(filters);
+
+            return await (
+                    await Collection<TItem>()
+                        .FindAsync(filterDefinition)
+                        .ConfigureAwait(false))
+                .ToListAsync()
+                .ConfigureAwait(false);
+        }
+
         public async Task UpdateOneAsync<TItem, TField>(Expression<Func<TItem, bool>> itemFinder,
             Expression<Func<TItem, TField>> fieldSelector, TField fieldValue)
         {
@@ -51,6 +63,19 @@ namespace Storage
         {
             return Builders<TItem>.Update
                 .Set(fieldSelector, fieldValue);
+        }
+
+        private FilterDefinition<TItem> FilterDefinition<TItem>(IReadOnlyCollection<IFilter<TItem>> filters)
+        {
+            var builder = Builders<TItem>.Filter;
+            var filterDefinition = builder.Empty;
+
+            foreach (var filter in filters)
+            {
+                filterDefinition &= builder.Eq(filter.FieldSelector, filter.FieldValue);
+            }
+
+            return filterDefinition;
         }
     }
 }

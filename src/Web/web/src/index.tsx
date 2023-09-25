@@ -10,11 +10,11 @@ import {
 import { RecoilRoot } from "recoil";
 import RecoilNexus from "recoil-nexus";
 import "./index.css";
-import { AuthorizedPageContent } from "./pages/AuthorizedPageContent";
-import BaseViewPaper from "./pages/BaseViewPaper";
 import { Layout } from "./pages/Layout";
+import { Loader } from "./pages/Loader";
 import { SignIn } from "./pages/SignIn";
-import { authorizedRoutes, publicRoutes } from "./routing/routes";
+import { publicRoutes } from "./routing/publicRoutes";
+import { authorizedRoutes } from "./routing/routes";
 import { theme } from "./theme";
 
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
@@ -29,10 +29,8 @@ const router = createBrowserRouter(
         <Route
           path={authorizedRoute.path}
           element={
-            <Suspense fallback={<BaseViewPaper>Loading</BaseViewPaper>}>
-              <AuthorizedPageContent>
-                <authorizedRoute.content></authorizedRoute.content>
-              </AuthorizedPageContent>
+            <Suspense fallback={<Loader />}>
+              <authorizedRoute.content />
             </Suspense>
           }
         />

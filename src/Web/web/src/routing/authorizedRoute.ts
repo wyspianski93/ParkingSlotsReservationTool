@@ -13,6 +13,6 @@ export class AuthorizedRoute implements Route {
       throw new Error("Content cannot be null.");
     }
 
-    this.content = () => AuthorizedPageContent({ children: content() });
+    this.content = () => AuthorizedPageContent({ children: () => content() });
   }
 }

@@ -5,7 +5,7 @@ import { FormActionButton } from "../components/form/FormActionButton";
 import { FormErrorContainer } from "../components/form/FormErrorContainer";
 import { FormInputField } from "../components/form/FormInputField";
 import { FromNavigationLink } from "../components/form/FromNavigationLink";
-import { PublicRoutes } from "../routing/routes";
+import { PublicRoutes } from "../routing/publicRoutes";
 import { register } from "../services/register";
 
 export function Register(): JSX.Element {

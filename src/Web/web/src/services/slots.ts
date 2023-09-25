@@ -1,11 +1,5 @@
+import { Slot } from "../models/slot";
 import { fetchAuthorized } from "./fetchAuthorized";
-
-export interface Slot {
-  id: string;
-  name: string;
-  ownerName: string;
-  reservations: { id: string }[];
-}
 
 export async function getSlots(): Promise<{ slots: Slot[]; error: string }> {
   const requestUrl = `http://localhost:5267/slots`;

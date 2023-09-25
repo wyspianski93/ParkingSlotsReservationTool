@@ -1,4 +1,6 @@
-﻿using Reservations.Service.Endpoints;
+﻿using Microsoft.AspNetCore.Mvc;
+using Reservations.Service.Endpoints;
+using Reservations.Service.Filtering;
 using Services.Common;
 using Storage;
 using Storage.Serializing;
@@ -30,6 +32,10 @@ namespace Reservations.Service
             services.AddSingleton<IMongoDbConfig>(_ => _mongoDbConfig);
             services.AddSingleton<IBsonSerializersRegistrant, CommonSerializersRegistrant>();
             services.AddSingleton<IBsonSerializersRegistrantsRunner, BsonSerializersRegistrantsRunner>();
+
+            services.AddSingleton<IReservationFilterProviderFactory, ReservationFilterProviderFactory>();
+            services.AddSingleton<IReservationFilterProvider, SlotIdFilterProvider>();
+            services.AddSingleton<IReservationFilterProvider, ReservedByIdFilterProvider>();
 
             services.AddSingleton<IReservationsRepository, ReservationsRepository>();
             services.AddSingleton<IRepository, MongoRepository>();

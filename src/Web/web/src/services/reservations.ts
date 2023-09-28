@@ -3,11 +3,19 @@ import { fetchAuthorized } from "./fetchAuthorized";
 
 export type ReservationFilter = { type: "reservedById" | "slotId"; value: string };
 
-export async function getReservations(reservationFilter: ReservationFilter): Promise<{
+export async function getReservations(reservationFilter?: ReservationFilter | undefined): Promise<{
   reservations: Reservation[];
   error: string;
 }> {
-  const requestUrl = `http://localhost:5111/reservations?${reservationFilter.type}=${reservationFilter.value}`;
+  const queryFilter = reservationFilter
+    ? `?${reservationFilter.type}=${reservationFilter.value}`
+    : undefined;
+
+  let requestUrl = `http://localhost:5111/reservations`;
+
+  if (queryFilter) {
+    requestUrl = `${requestUrl}${queryFilter}`;
+  }
 
   let response: Response;
 

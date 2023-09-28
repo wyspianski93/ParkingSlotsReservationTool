@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.Reflection;
+using Microsoft.AspNetCore.Authorization;
 using Services.Common;
 using Slots.Service.Dto;
 using Slots.Service.Models;
@@ -14,6 +15,14 @@ namespace Slots.Service.Endpoints
                 {
                     var slots = await slotsRepository.GetSlotsAsync().ConfigureAwait(false);
 
+                    return Results.Ok(slots);
+                });
+
+            endpoint.MapGet(
+                "/slots/reservable", [Authorize] async(string from, string to, ISlotsRepository slotsRepository) =>
+                {
+                    var slots = await slotsRepository.GetReservableSlotsAsync(from, to).ConfigureAwait(false);
+   
                     return Results.Ok(slots);
                 });
 

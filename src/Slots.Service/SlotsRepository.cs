@@ -1,4 +1,5 @@
-﻿using Slots.Service.Models;
+﻿using Slots.Service.Endpoints;
+using Slots.Service.Models;
 using Storage;
 
 namespace Slots.Service
@@ -6,6 +7,8 @@ namespace Slots.Service
     public interface ISlotsRepository
     {
         Task<IReadOnlyCollection<Slot>> GetSlotsAsync();
+
+        Task<IReadOnlyCollection<Slot>> GetReservableSlotsAsync(string from, string to);
 
         Task<Slot> GetSlotAsync(string slotId);
 
@@ -21,15 +24,27 @@ namespace Slots.Service
     public class SlotsRepository : ISlotsRepository
     {
         private readonly IRepository _repository;
+        private readonly IReservableSlotsProvider _reservableSlotsProvider;
 
-        public SlotsRepository(IRepository repository)
+        public SlotsRepository(IRepository repository, IReservableSlotsProvider reservableSlotsProvider)
         {
             _repository = repository;
+            _reservableSlotsProvider = reservableSlotsProvider;
         }
 
         public async Task<IReadOnlyCollection<Slot>> GetSlotsAsync()
         {
             return await _repository.GetAllAsync<Slot>().ConfigureAwait(false);
+        }
+        
+        //TODO: perform filtering on repository side?
+        public async Task<IReadOnlyCollection<Slot>> GetReservableSlotsAsync(string from, string to)
+        {
+            var slots = await _repository.GetAllAsync<Slot>().ConfigureAwait(false);
+
+            var reservableSlots = _reservableSlotsProvider.GetReservableSlots(slots, from, to);
+
+            return reservableSlots.ToList();
         }
 
         public async Task<Slot> GetSlotAsync(string slotId)

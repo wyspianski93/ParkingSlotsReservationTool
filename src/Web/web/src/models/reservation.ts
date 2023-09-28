@@ -3,6 +3,8 @@ export enum ReservationStatus {
   confirmed = 1,
   canceled = 2,
 }
+
+//TODO extract reservation for slot and for reservation
 export interface Reservation {
   id: string;
   reservedById: string;

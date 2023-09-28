@@ -25,16 +25,6 @@ class AuthService {
     return this.accessToken;
   }
 
-  public getUserId() {
-    if (this.accessToken === undefined) {
-      return "";
-    }
-
-    const decoded = jwtDecode<{ userName: string; userId: string }>(this.accessToken);
-
-    return decoded.userId ?? "";
-  }
-
   public async authorize(email: string, password: string): Promise<{ error: string | undefined }> {
     const error = await this.authorizeInternal(
       "signin",
@@ -55,7 +45,17 @@ class AuthService {
     setInterval(refresh, 300000);
   }
 
-  async authorizeInternal(
+  private getUserId(token: string | undefined) {
+    if (token === undefined) {
+      return "";
+    }
+
+    const decoded = jwtDecode<{ userName: string; userId: string }>(token);
+
+    return decoded.userId ?? "";
+  }
+
+  private async authorizeInternal(
     path: string,
     body: string,
     isAuthorizedCallback?: () => void,
@@ -71,18 +71,22 @@ class AuthService {
         body,
       });
     } catch (e) {
-      setRecoil(userAuthorizationState, { isAuthorized: false, roles: [] });
+      setRecoil(userAuthorizationState, { isAuthorized: false, userId: "", roles: [] });
       return { error: "Could not connect to signin service." };
     }
 
     if (response.status != 200) {
-      setRecoil(userAuthorizationState, { isAuthorized: false, roles: [] });
+      setRecoil(userAuthorizationState, { isAuthorized: false, userId: "", roles: [] });
       return { error: "Could not authorize." };
     }
 
     const token: Token = await response.json();
 
-    setRecoil(userAuthorizationState, { isAuthorized: true, roles: [] });
+    setRecoil(userAuthorizationState, {
+      isAuthorized: true,
+      userId: this.getUserId(token.accessToken),
+      roles: [],
+    });
 
     this.setTokens(token.accessToken, token.refreshToken);
 

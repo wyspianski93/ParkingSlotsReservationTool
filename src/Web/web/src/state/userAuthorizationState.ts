@@ -11,6 +11,6 @@ import { atom } from "recoil";
 
 export const userAuthorizationState = atom({
   key: "authorizationState",
-  default: { isAuthorized: false, roles: [] as string[] },
+  default: { isAuthorized: false, userId: "", roles: [] as string[] },
   // effects: [refreshTokenEffect("userstate")],
 });

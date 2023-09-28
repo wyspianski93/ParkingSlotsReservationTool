@@ -22,11 +22,16 @@ const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement)
 const router = createBrowserRouter(
   createRoutesFromElements([
     <Route element={<Layout />}>
-      {publicRoutes.map((publicRoute) => (
-        <Route path={publicRoute.path} element={<publicRoute.content />} />
-      ))}
-      {authorizedRoutes.map((authorizedRoute) => (
+      {publicRoutes.map((publicRoute, index) => (
         <Route
+          key={`${publicRoute.path}_${index}`}
+          path={publicRoute.path}
+          element={<publicRoute.content />}
+        />
+      ))}
+      {authorizedRoutes.map((authorizedRoute, index) => (
+        <Route
+          key={`${authorizedRoute.path}_${index}`}
           path={authorizedRoute.path}
           element={
             <Suspense fallback={<Loader />}>

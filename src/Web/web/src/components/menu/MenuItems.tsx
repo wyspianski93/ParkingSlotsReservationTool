@@ -15,6 +15,7 @@ export function MenuItems(): JSX.Element {
           .filter(isMenuAccessibleRoute)
           .map((authorizedRoute) => (
             <MenuItem
+              key={`${authorizedRoute.name}_${authorizedRoute.path}`}
               navigationPath={authorizedRoute.path}
               Icon={authorizedRoute.icon}
               name={authorizedRoute.name}

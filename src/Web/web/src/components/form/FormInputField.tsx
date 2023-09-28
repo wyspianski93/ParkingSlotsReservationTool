@@ -5,13 +5,27 @@ export function FormInputField({
   value,
   onChange,
   type,
+  inputRef,
+  error,
 }: {
   label: string;
   value: string;
   onChange?: React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> | undefined;
   type?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  inputRef?: React.Ref<any> | undefined;
+  error?: boolean;
 }): JSX.Element {
-  return <StyledTextField label={label} value={value} type={type} onChange={onChange} />;
+  return (
+    <StyledTextField
+      label={label}
+      value={value}
+      type={type}
+      onChange={onChange}
+      inputRef={inputRef}
+      error={error !== undefined && error}
+    />
+  );
 }
 
 const StyledTextField = styled(TextField)(({ theme }) => ({

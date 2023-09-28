@@ -1,14 +1,16 @@
 import { Button, Grid } from "@mui/material";
+import { useEffect } from "react";
 import { useRecoilRefresher_UNSTABLE, useRecoilValue } from "recoil";
 import { ReservationSimpleView } from "../components/reservations/ReservationSimpleView";
-import { authService } from "../services/auth";
-import { reservationsByUserSelector } from "../state/reservationsState";
+import { reservationsByCurrentUserSelector } from "../state/reservationsState";
 
 export function UserReservations(): JSX.Element {
-  const reservations = useRecoilValue(reservationsByUserSelector(authService.getUserId()));
-  const refreshReservations = useRecoilRefresher_UNSTABLE(
-    reservationsByUserSelector(authService.getUserId()),
-  );
+  const reservations = useRecoilValue(reservationsByCurrentUserSelector);
+  const refreshReservations = useRecoilRefresher_UNSTABLE(reservationsByCurrentUserSelector);
+
+  useEffect(() => {
+    refreshReservations();
+  }, []);
 
   return (
     <>
@@ -20,7 +22,7 @@ export function UserReservations(): JSX.Element {
         columnSpacing={2}
       >
         {reservations.map((reservation) => (
-          <Grid item md={2}>
+          <Grid item md={2} key={`${reservation.id}_${reservation.slotId}`}>
             <ReservationSimpleView
               id={reservation.id}
               from={reservation.period.from}

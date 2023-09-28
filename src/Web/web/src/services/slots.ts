@@ -48,3 +48,30 @@ export async function getSlot(slotId: string): Promise<{ slot: Slot | undefined;
 
   return { slot, error: "" };
 }
+
+export async function getReservableSlots(
+  from: string,
+  to: string,
+): Promise<{ slots: Slot[] | undefined; error: string }> {
+  const requestUrl = `http://localhost:5267/slots/reservable?from=${from}&to=${to}`;
+
+  let response: Response;
+
+  try {
+    response = await fetchAuthorized(requestUrl, {
+      method: "get",
+    });
+  } catch (e) {
+    return { slots: undefined, error: "Could not connect to slots service." };
+  }
+
+  if (response.status != 200) {
+    return { slots: undefined, error: "Error occured." };
+  }
+
+  const resultJson = await response.json();
+
+  const slots: Slot[] = resultJson as Slot[];
+
+  return { slots, error: "" };
+}

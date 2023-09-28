@@ -1,14 +1,24 @@
-import { selectorFamily } from "recoil";
+import { selector, selectorFamily } from "recoil";
 import { getReservations } from "../services/reservations";
+import { userAuthorizationState } from "./userAuthorizationState";
 
-export const reservationsByUserSelector = selectorFamily({
-  key: "reservationsByUserSelector",
-  get:
-    (reservedById: string) =>
-    async ({ get }) => {
-      const response = await getReservations({ type: "reservedById", value: reservedById });
-      return response.reservations;
-    },
+export const reservationsSelector = selector({
+  key: "reservationsSelector",
+  get: async ({ get }) => {
+    const response = await getReservations();
+    return response.reservations;
+  },
+});
+
+export const reservationsByCurrentUserSelector = selector({
+  key: "reservationsByCurrentUserSelector",
+  get: async ({ get }) => {
+    const { userId } = get(userAuthorizationState);
+    const reservations = get(reservationsSelector).filter(
+      (reservation) => reservation.reservedById === userId,
+    );
+    return reservations;
+  },
 });
 
 export const reservationsBySlotSelector = selectorFamily({
@@ -16,17 +26,19 @@ export const reservationsBySlotSelector = selectorFamily({
   get:
     (slotId: string) =>
     async ({ get }) => {
-      const response = await getReservations({ type: "slotId", value: slotId });
-      return response.reservations;
+      const reservations = get(reservationsSelector).filter(
+        (reservation) => reservation.slotId === slotId,
+      );
+      return reservations;
     },
 });
 
-export const reservationByIdAndUserSelector = selectorFamily({
-  key: "reservationByIdAndUserSelector",
+export const reservationByIdAndCurrentUserSelector = selectorFamily({
+  key: "reservationByIdAndCurrentUserSelector",
   get:
-    ({ userId, reservationId }: { userId: string; reservationId: string }) =>
+    (reservationId: string) =>
     ({ get }) => {
-      const reservations = get(reservationsByUserSelector(userId));
+      const reservations = get(reservationsByCurrentUserSelector);
       const reservation = reservations.find((x) => x.id == reservationId);
       return reservation;
     },

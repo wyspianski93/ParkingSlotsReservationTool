@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { Navigate } from "react-router";
 import { useRecoilValue } from "recoil";
+import { InputField } from "../components/InputField";
 import { Form } from "../components/form/Form";
 import { FormActionButton } from "../components/form/FormActionButton";
 import { FormErrorContainer } from "../components/form/FormErrorContainer";
-import { FormInputField } from "../components/form/FormInputField";
 import { FromNavigationLink } from "../components/form/FromNavigationLink";
 import { PublicRoutes } from "../routing/publicRoutes";
 import { authService } from "../services/auth";
@@ -23,8 +23,14 @@ export function SignIn(): JSX.Element {
 
   return (
     <Form>
-      <FormInputField label={"E-mail"} value={email} onChange={(e) => setEmail(e.target.value)} />
-      <FormInputField
+      <InputField
+        width="40%"
+        label={"E-mail"}
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+      />
+      <InputField
+        width="40%"
         type={"password"}
         label={"Password"}
         value={password}

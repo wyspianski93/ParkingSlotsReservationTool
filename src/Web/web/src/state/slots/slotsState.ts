@@ -59,6 +59,10 @@ export const reservableSlotsByNotCurrentUserSelector = selector({
     const { from, to } = get(slotsFilterState);
     const { userId } = get(userAuthorizationState);
 
+    if (Date.parse(from) > Date.parse(to)) {
+      return [];
+    }
+
     const { slots } = await getReservableSlots(from, to);
 
     if (!slots) {

@@ -22,6 +22,7 @@ namespace Reservations.Service.Endpoints
                 [Authorize]
                 async (ReservationDto reservationDto, IReservationsRepository reservationsRepository, IIdentityService identityService, IEventBus eventBus) =>
                 {
+                    // add check if already reserved?
                     var userId = identityService.GetUserId();
 
                     var newReservation = new Reservation()

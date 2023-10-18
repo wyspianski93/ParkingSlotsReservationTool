@@ -75,3 +75,30 @@ export async function getReservableSlots(
 
   return { slots, error: "" };
 }
+
+export async function addSlot(
+  name: string,
+  availabilityPeriods: { from: string; to: string }[],
+): Promise<{ error: string | undefined }> {
+  const requestUrl = `http://localhost:5267/slots/create`;
+
+  let response: Response;
+
+  try {
+    response = await fetchAuthorized(requestUrl, {
+      method: "post",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ name, availabilityPeriods }),
+    });
+  } catch (e) {
+    return { error: "Could not connect to slots service." };
+  }
+
+  const resultJson = await response.json();
+
+  if (response.status != 200) {
+    return { error: `Error occured. ${resultJson}` };
+  }
+
+  return { error: undefined };
+}

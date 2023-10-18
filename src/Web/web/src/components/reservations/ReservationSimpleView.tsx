@@ -1,17 +1,11 @@
 import { Box, Typography } from "@mui/material";
-import { ReservationStatus } from "../../models/reservation";
+import { useRecoilValue } from "recoil";
+import { Reservation, ReservationStatus } from "../../models/reservation";
+import { slotByIdSelector } from "../../state/slots/slotsState";
 
-export function ReservationSimpleView({
-  id,
-  from,
-  to,
-  status,
-}: {
-  id: string;
-  from: string;
-  to: string;
-  status: ReservationStatus;
-}): JSX.Element {
+export function ReservationSimpleView({ reservation }: { reservation: Reservation }): JSX.Element {
+  const slotInfo = useRecoilValue(slotByIdSelector(reservation.slotId));
+
   return (
     <Box
       sx={{
@@ -21,13 +15,14 @@ export function ReservationSimpleView({
       }}
     >
       <Typography variant="h6" sx={{ padding: "5px" }}>
-        {id}
+        {slotInfo?.name}
       </Typography>
-      <span>from: {from}</span>
+      <span>owner name: {slotInfo?.ownerName} </span>
+      <span>from: {reservation.period.from}</span>
       <br></br>
-      <span>to: {to}</span>
+      <span>to: {reservation.period.to}</span>
       <br></br>
-      <span>status: {ReservationStatus[status]}</span>
+      <span>status: {ReservationStatus[reservation.status]}</span>
     </Box>
   );
 }

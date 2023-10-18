@@ -23,12 +23,7 @@ export function UserReservations(): JSX.Element {
       >
         {reservations.map((reservation) => (
           <Grid item md={2} key={`${reservation.id}_${reservation.slotId}`}>
-            <ReservationSimpleView
-              id={reservation.id}
-              from={reservation.period.from}
-              to={reservation.period.to}
-              status={reservation.status}
-            />
+            <ReservationSimpleView reservation={reservation} />
           </Grid>
         ))}
       </Grid>

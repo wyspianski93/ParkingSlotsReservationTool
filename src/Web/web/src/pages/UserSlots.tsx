@@ -1,15 +1,15 @@
-import { Grid } from "@mui/material";
+import { Button, Grid, styled } from "@mui/material";
 import { useState } from "react";
-import { useRecoilValue } from "recoil";
-import { AddSlotButton } from "../components/slots/user-slots/AddSlotButton";
+import { useRecoilRefresher_UNSTABLE, useRecoilValue } from "recoil";
 import { AddSlotDialog } from "../components/slots/user-slots/AddSlotDialog";
 import { UserSlotSimpleView } from "../components/slots/user-slots/UserSlotSimpleView";
 import { slotsByCurrentUserSelector } from "../state/slots/slotsState";
 
 export function UserSlots(): JSX.Element {
-  const [addSlotDialogOpen, setAddSlotDialogOpen] = useState(false);
+  const [isAddSlotDialogOpen, setIsAddSlotDialogOpen] = useState(false);
 
   const slots = useRecoilValue(slotsByCurrentUserSelector);
+  const refreshSlots = useRecoilRefresher_UNSTABLE(slotsByCurrentUserSelector);
 
   return (
     <>
@@ -30,8 +30,36 @@ export function UserSlots(): JSX.Element {
           </Grid>
         ))}
       </Grid>
-      <AddSlotButton label={"Add slot"} onClick={() => setAddSlotDialogOpen(true)} />
-      <AddSlotDialog isOpen={addSlotDialogOpen} setIsOpen={setAddSlotDialogOpen} />
+      <AddSlotButton label={"Add slot"} onClick={() => setIsAddSlotDialogOpen(true)} />
+      {isAddSlotDialogOpen && (
+        <AddSlotDialog
+          isOpen={isAddSlotDialogOpen}
+          setIsOpen={setIsAddSlotDialogOpen}
+          onAdded={refreshSlots}
+        />
+      )}
     </>
   );
 }
+
+function AddSlotButton({
+  label,
+  onClick,
+}: {
+  label: string;
+  onClick: React.MouseEventHandler<HTMLButtonElement> | undefined;
+}): JSX.Element {
+  return <StyledButton onClick={onClick}>{label}</StyledButton>;
+}
+
+const StyledButton = styled(Button)(({ theme }) => ({
+  width: "20%",
+  alignSelf: "center",
+  padding: "5px",
+  color: "black",
+  backgroundColor: "#da8166",
+  borderRadius: "30px",
+  "&:hover": {
+    backgroundColor: "#ec8c6f",
+  },
+}));

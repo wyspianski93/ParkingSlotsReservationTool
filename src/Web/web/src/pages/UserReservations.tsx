@@ -1,4 +1,4 @@
-import { Button, Grid } from "@mui/material";
+import { Button, Grid, styled } from "@mui/material";
 import { useEffect } from "react";
 import { useRecoilRefresher_UNSTABLE, useRecoilValue } from "recoil";
 import { ReservationSimpleView } from "../components/reservations/ReservationSimpleView";
@@ -14,7 +14,7 @@ export function UserReservations(): JSX.Element {
 
   return (
     <>
-      <Button onClick={() => refreshReservations()}>Refresh</Button>
+      <RefreshButton label="REFRESH" onClick={() => refreshReservations()} />
       <Grid
         container
         sx={{ padding: "20px", flexDirection: "row" }}
@@ -30,3 +30,27 @@ export function UserReservations(): JSX.Element {
     </>
   );
 }
+
+//TODO: unify all buttons
+function RefreshButton({
+  label,
+  onClick,
+}: {
+  label: string;
+  onClick: React.MouseEventHandler<HTMLButtonElement> | undefined;
+}): JSX.Element {
+  return <StyledButton onClick={onClick}>{label}</StyledButton>;
+}
+
+const StyledButton = styled(Button)(({ theme }) => ({
+  margin: "auto",
+  marginTop: "10px",
+  width: "20%",
+  padding: "8px",
+  color: "black",
+  backgroundColor: "#da8166",
+  borderRadius: "30px",
+  "&:hover": {
+    backgroundColor: "#ec8c6f",
+  },
+}));

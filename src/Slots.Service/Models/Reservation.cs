@@ -1,5 +1,6 @@
 ﻿namespace Slots.Service.Models
 {
+    //TODO: add creation timestamp
     public class Reservation
     {
         public Guid Id { get; set; }

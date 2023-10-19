@@ -1,4 +1,4 @@
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button, Typography, styled } from "@mui/material";
 import { NavLink } from "react-router-dom";
 
 export function SlotSimpleView({
@@ -27,9 +27,28 @@ export function SlotSimpleView({
       <br></br>
       <span>reservations: {reservationsCount}</span>
 
-      <NavLink to={`/slots/${id}`}>
-        <Button sx={{ color: "black" }}>Details</Button>
+      <NavLink to={`/slots/${id}`} style={{ textDecoration: "none" }}>
+        <DetailsButton label="Details" />
       </NavLink>
     </Box>
   );
 }
+
+function DetailsButton({ label }: { label: string }): JSX.Element {
+  return <StyledButton>{label}</StyledButton>;
+}
+
+const StyledButton = styled(Button)(({ theme }) => ({
+  fontSize: "10px",
+  display: "block",
+  margin: "auto",
+  marginTop: "10px",
+  width: "20%",
+  padding: "8px",
+  color: "black",
+  backgroundColor: "#da8166",
+  borderRadius: "30px",
+  "&:hover": {
+    backgroundColor: "#ec8c6f",
+  },
+}));

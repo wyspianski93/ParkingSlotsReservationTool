@@ -1,11 +1,11 @@
 import { Box, Button, Typography, styled } from "@mui/material";
 import { useState } from "react";
 import { useParams } from "react-router";
-import { useRecoilRefresher_UNSTABLE, useRecoilValue } from "recoil";
+import { useRecoilValue } from "recoil";
 import { CreateReservationDialog } from "../components/slots/CreateReservationDialog";
 import { createReservation } from "../services/reservations";
 import { slotsFilterState } from "../state/slots/slotsFilterState";
-import { slotByIdSelector, slotsSelector } from "../state/slots/slotsState";
+import { slotByIdSelector } from "../state/slots/slotsState";
 
 export function Slot(): JSX.Element {
   const params = useParams();
@@ -15,8 +15,6 @@ export function Slot(): JSX.Element {
   const slot = useRecoilValue(slotByIdSelector(params.slotId!))!;
 
   const { from, to } = useRecoilValue(slotsFilterState);
-
-  const refreshSlots = useRecoilRefresher_UNSTABLE(slotsSelector);
 
   return (
     <div
@@ -45,7 +43,6 @@ export function Slot(): JSX.Element {
           label="RESERVE"
           onClick={async () => {
             setIsCreateReservationDialogOpen(true);
-            // refreshSlots();
           }}
         />
         <CreateReservationDialog

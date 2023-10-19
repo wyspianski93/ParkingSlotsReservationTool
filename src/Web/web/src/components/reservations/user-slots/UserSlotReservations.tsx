@@ -12,10 +12,10 @@ export function UserSlotReservations({ slotId }: { slotId: string }): JSX.Elemen
   }, []);
 
   return (
-    <div>
+    <>
       {reservations.map((reservation) => (
         <UserSlotReservation reservation={reservation} />
       ))}
-    </div>
+    </>
   );
 }

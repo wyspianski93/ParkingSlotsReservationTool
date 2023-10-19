@@ -89,8 +89,8 @@ export async function acceptReservation(reservationId: string): Promise<{ error:
   return { error: "" };
 }
 
-export async function cancelReservation(reservationId: string): Promise<{ error: string }> {
-  const requestUrl = `http://localhost:5111/reservations/${reservationId}/cancel`;
+export async function rejectReservation(reservationId: string): Promise<{ error: string }> {
+  const requestUrl = `http://localhost:5111/reservations/${reservationId}/reject`;
 
   let response: Response;
 

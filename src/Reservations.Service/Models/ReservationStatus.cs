@@ -8,6 +8,6 @@ namespace Reservations.Service.Models
     {
         Pending = 0,
         Confirmed = 1,
-        Canceled = 2
+        Rejected = 2
     }
 }

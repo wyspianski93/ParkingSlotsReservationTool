@@ -61,17 +61,17 @@ namespace Reservations.Service.Endpoints
                 });
 
             endpoint.MapPost(
-                "/reservations/{reservationId}/cancel",
+                "/reservations/{reservationId}/reject",
                 [Authorize]
                 async (string reservationId, IReservationsRepository reservationsRepository, IEventBus eventBus) =>
                 {
                     await reservationsRepository
-                        .UpdateReservationStatusAsync(Guid.Parse(reservationId), ReservationStatus.Canceled).ConfigureAwait(false);
+                        .UpdateReservationStatusAsync(Guid.Parse(reservationId), ReservationStatus.Rejected).ConfigureAwait(false);
 
                     eventBus.Publish(
-                        new ReservationStatusUpdatedEvent(Guid.Parse(reservationId), ReservationStatus.Canceled));
+                        new ReservationStatusUpdatedEvent(Guid.Parse(reservationId), ReservationStatus.Rejected));
 
-                    return Results.Ok($"Reservation '{reservationId}' canceled.");
+                    return Results.Ok($"Reservation '{reservationId}' rejected.");
                 });
         }
     }

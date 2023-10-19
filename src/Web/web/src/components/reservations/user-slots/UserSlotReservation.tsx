@@ -1,7 +1,7 @@
 import { Box, Button, styled } from "@mui/material";
 import { useRecoilRefresher_UNSTABLE } from "recoil";
 import { Reservation, ReservationStatus } from "../../../models/reservation";
-import { acceptReservation, cancelReservation } from "../../../services/reservations";
+import { acceptReservation, rejectReservation } from "../../../services/reservations";
 import { reservationsBySlotSelector } from "../../../state/reservationsState";
 
 export function UserSlotReservation({ reservation }: { reservation: Reservation }): JSX.Element {
@@ -31,9 +31,9 @@ export function UserSlotReservation({ reservation }: { reservation: Reservation 
           }}
         />
         <ReservationActionButton
-          label="CANCEL"
+          label="REJECT"
           onClick={async () => {
-            await cancelReservation(reservation.id);
+            await rejectReservation(reservation.id);
             refreshReservation();
           }}
         />

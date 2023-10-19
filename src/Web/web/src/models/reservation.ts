@@ -1,7 +1,7 @@
 export enum ReservationStatus {
   pending = 0,
   confirmed = 1,
-  canceled = 2,
+  rejected = 2,
 }
 
 //TODO extract reservation for slot and for reservation

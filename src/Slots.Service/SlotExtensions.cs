@@ -13,10 +13,11 @@ namespace Slots.Service
 
         public static bool HasNoReservationsOverlappingWithRequestedPeriod(this Slot slot, DateOnly from, DateOnly to)
         {
+            //TODO: add tests for canceled scenario
             return slot
-                .Reservations
-                .Select(reservation => reservation.ReservationPeriod)
-                .All(reservationPeriod => !(reservationPeriod.From <= to && from <= reservationPeriod.To));
+                    .Reservations
+                    .Select(reservation => new { period = reservation.ReservationPeriod, status = reservation.ReservationStatus })
+                    .All(reservation => reservation.status == ReservationStatus.Canceled || !(reservation.period.From <= to && from <= reservation.period.To));
         }
     }
 }

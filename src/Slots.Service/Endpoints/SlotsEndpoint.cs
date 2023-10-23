@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Diagnostics;
+using System.Reflection;
 using Microsoft.AspNetCore.Authorization;
 using Services.Common;
 using Slots.Service.Dto;
@@ -42,7 +43,7 @@ namespace Slots.Service.Endpoints
                     var userId = identityService.GetUserId();
                     var userName = identityService.GetUserName();
 
-                    var slotWithNameExists = await slotsRepository.CheckSlotExistsAsync(slotDto.Name);
+                    var slotWithNameExists = await slotsRepository.CheckSlotExistsAsync(slotDto.Name).ConfigureAwait(false);
                     
                     if (slotWithNameExists)
                     {
@@ -62,7 +63,7 @@ namespace Slots.Service.Endpoints
                             .ToList()
                     };
 
-                    await slotsRepository.AddSlotAsync(newSlot);
+                    await slotsRepository.AddSlotAsync(newSlot).ConfigureAwait(false);
                     
                     return Results.Ok($"Slot '{newSlot.Name}' added.");
                 });

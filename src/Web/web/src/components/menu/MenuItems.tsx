@@ -3,7 +3,7 @@ import { useRecoilValue } from "recoil";
 import { isMenuAccessibleRoute } from "../../routing/menuAccessibleRoute";
 import { authorizedRoutes } from "../../routing/routes";
 import { userAuthorizationState } from "../../state/userAuthorizationState";
-import { MenuItem } from "./MenuItem";
+import { MenuNavigationItem } from "./MenuItem";
 
 export function MenuItems(): JSX.Element {
   const { isAuthorized } = useRecoilValue(userAuthorizationState);
@@ -14,12 +14,12 @@ export function MenuItems(): JSX.Element {
         authorizedRoutes
           .filter(isMenuAccessibleRoute)
           .map((authorizedRoute) => (
-            <MenuItem
+            <MenuNavigationItem
               key={`${authorizedRoute.name}_${authorizedRoute.path}`}
               navigationPath={authorizedRoute.path}
               Icon={authorizedRoute.icon}
               name={authorizedRoute.name}
-            ></MenuItem>
+            ></MenuNavigationItem>
           ))}
     </div>
   );

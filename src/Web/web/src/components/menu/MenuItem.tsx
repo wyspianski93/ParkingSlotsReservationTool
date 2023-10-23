@@ -2,13 +2,17 @@ import { SvgIconComponent } from "@material-ui/icons";
 import { styled } from "@mui/material";
 import { NavLink } from "react-router-dom";
 
-export interface MenuItemProps {
+export interface MenuNavigationItemProps {
   navigationPath: string;
   Icon: SvgIconComponent;
   name: string;
 }
 
-export function MenuItem({ navigationPath, Icon, name }: MenuItemProps): JSX.Element {
+export function MenuNavigationItem({
+  navigationPath,
+  Icon,
+  name,
+}: MenuNavigationItemProps): JSX.Element {
   return (
     <NavLink
       to={navigationPath}
@@ -19,15 +23,15 @@ export function MenuItem({ navigationPath, Icon, name }: MenuItemProps): JSX.Ele
         };
       }}
     >
-      <StyledMenuItem>
+      <StyledMenuNavigationItem>
         <Icon />
         <span>{name}</span>
-      </StyledMenuItem>
+      </StyledMenuNavigationItem>
     </NavLink>
   );
 }
 
-const StyledMenuItem = styled("div")({
+const StyledMenuNavigationItem = styled("div")({
   display: "flex",
   flexDirection: "column",
   alignItems: "center",

@@ -1,11 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Reservations.Service.Endpoints;
-using Reservations.Service.Filtering;
+﻿using Notifications.Service.EventsHandlers;
 using Services.Common;
 using Storage;
 using Storage.Serializing;
+using Microsoft.AspNetCore.SignalR;
+using Notifications.Service.SignalR;
 
-namespace Reservations.Service
+namespace Notifications.Service
 {
     public class Startup
     {
@@ -28,20 +28,23 @@ namespace Reservations.Service
 
             services.AddCors();
 
+            services.AddSignalR();
+    
             services.AddHttpContextAccessor();
             services.AddSingleton<IMongoDbConfig>(_ => _mongoDbConfig);
             services.AddSingleton<IBsonSerializersRegistrant, CommonSerializersRegistrant>();
             services.AddSingleton<IBsonSerializersRegistrantsRunner, BsonSerializersRegistrantsRunner>();
 
-            services.AddSingleton<IReservationFilterProviderFactory, ReservationFilterProviderFactory>();
-            services.AddSingleton<IReservationFilterProvider, SlotIdFilterProvider>();
-            services.AddSingleton<IReservationFilterProvider, ReservedByIdFilterProvider>();
-
-            services.AddSingleton<IReservationsRepository, ReservationsRepository>();
             services.AddSingleton<IRepository, MongoRepository>();
+            services.AddSingleton<INotificationsRepository, NotificationsRepository>();
             services.AddScoped<IIdentityService, IdentityService>();
 
-            services.AddRabbitMqEventBus("reservations_service");
+            services.AddSingleton<INotificationsHubConnection, NotificationsHubConnection>(_ =>
+                new NotificationsHubConnection(new BaseHubConnection("http://localhost:5154/hubs/notifications"))
+            );
+
+            services.AddTransient<ReservationCreatedEventHandler>();
+            services.AddRabbitMqEventBus("notifications_service");
         }
 
         public void Configure(IApplicationBuilder app,
@@ -64,13 +67,13 @@ namespace Reservations.Service
                 builder
                     .WithOrigins("http://localhost:3000")
                     .AllowAnyHeader()
-                    .AllowAnyMethod();
-
+                    .AllowAnyMethod()
+                    .AllowCredentials();
             });
 
             app.UseEndpoints(endpoint =>
             {
-                endpoint.MapReservationsEndpoint();
+                endpoint.MapHub<NotificationsHub>("/hubs/notifications");
             });
         }
     }

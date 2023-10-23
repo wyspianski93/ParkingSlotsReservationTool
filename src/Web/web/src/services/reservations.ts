@@ -40,6 +40,9 @@ export async function getReservations(reservationFilter?: ReservationFilter | un
 
 export async function createReservation(
   slotId: string,
+  //TODO: slotOwnerId = reservationReceiverUserId?
+  slotOwnerId: string,
+  slotName: string,
   from: string,
   to: string,
 ): Promise<{ error: string }> {
@@ -51,7 +54,7 @@ export async function createReservation(
     response = await fetchAuthorized(requestUrl, {
       method: "post",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify({ slotId, from, to }),
+      body: JSON.stringify({ slotId, slotName, slotOwnerId, from, to }),
     });
   } catch (e) {
     return { error: "Could not connect to reservations service." };

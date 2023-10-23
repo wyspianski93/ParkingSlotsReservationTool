@@ -25,6 +25,8 @@ namespace Reservations.Service.Endpoints
                     //TODO: add check if already reserved
                     var userId = identityService.GetUserId();
 
+                    //TODO: slotOwnerId = reservationReceiverUserId and add to Reservation model
+
                     var newReservation = new Reservation()
                     {
                         Id = Guid.NewGuid(),
@@ -41,7 +43,7 @@ namespace Reservations.Service.Endpoints
                     await reservationsRepository.AddReservationAsync(newReservation);
 
                     eventBus.Publish(
-                        new ReservationCreatedEvent(newReservation.SlotId, newReservation.Id, newReservation.Period));
+                        new ReservationCreatedEvent(newReservation.SlotId,  reservationDto.SlotName, Guid.Parse(reservationDto.SlotOwnerId), newReservation.Id, newReservation.Period));
 
                     return Results.Ok($"Reservation created. Waiting for slot's owner confirmation.");
                 });

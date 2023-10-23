@@ -13,13 +13,13 @@ namespace Slots.Service.EventsHandlers
             _slotsRepository = slotsRepository;
         }
 
-        public void Handle(ReservationCreatedEvent @event)
+        public async Task Handle(ReservationCreatedEvent @event)
         {
-            _slotsRepository.UpdateSlotReservationsAsync(@event.SlotId, new Reservation()
+            await _slotsRepository.UpdateSlotReservationsAsync(@event.SlotId, new Reservation()
             {
                 Id = @event.ReservationId,
                 ReservationPeriod = @event.ReservationPeriod
-            });
+            }).ConfigureAwait(false);
         }
     }
 }

@@ -12,9 +12,9 @@ namespace Slots.Service.EventsHandlers
             _slotsRepository = slotsRepository;
         }
 
-        public void Handle(ReservationStatusUpdatedEvent @event)
+        public async Task Handle(ReservationStatusUpdatedEvent @event)
         {
-            _slotsRepository.UpdateSlotReservationStatusAsync(@event.ReservationId, @event.Status);
+            await _slotsRepository.UpdateSlotReservationStatusAsync(@event.ReservationId, @event.Status).ConfigureAwait(false);
         }
     }
 }

@@ -48,7 +48,9 @@ export function Slot(): JSX.Element {
         <CreateReservationDialog
           isOpen={isCreateReservationDialogOpen}
           setIsOpen={setIsCreateReservationDialogOpen}
-          onConfirm={async () => await createReservation(slot.id, from, to)}
+          onConfirm={async () =>
+            await createReservation(slot.id, slot.ownerId, slot.name, from, to)
+          }
         />
       </Box>
     </div>

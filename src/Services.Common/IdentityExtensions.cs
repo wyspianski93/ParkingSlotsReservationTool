@@ -9,6 +9,9 @@ namespace Services.Common
     {
         public static void AddJwtAuthentication(this IServiceCollection services, JwtConfig jwtConfig)
         {
+            services.AddSingleton<IJwtConfig>(_ => jwtConfig);
+            services.AddSingleton<IJwtUtils, JwtUtils>();
+
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -29,6 +32,23 @@ namespace Services.Common
                     ValidateIssuerSigningKey = true,
                     RequireExpirationTime = true,
                     ClockSkew = TimeSpan.Zero
+                };
+                options.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = context =>
+                    {
+                        var path = context.HttpContext.Request.Path;
+
+                        if (!path.StartsWithSegments("/hubs/notifications")) return Task.CompletedTask;
+
+                        var accessToken = context.Request.Query["access_token"];
+                        if (!string.IsNullOrEmpty(accessToken))
+                        {
+                            context.Token = accessToken;
+                        }
+
+                        return Task.CompletedTask;
+                    }
                 };
             });
         }

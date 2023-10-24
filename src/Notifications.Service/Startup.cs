@@ -40,9 +40,11 @@ namespace Notifications.Service
             services.AddSingleton<INotificationsRepository, NotificationsRepository>();
             services.AddScoped<IIdentityService, IdentityService>();
 
-            services.AddSingleton<INotificationsHubConnection, NotificationsHubConnection>(_ =>
-                new NotificationsHubConnection(new BaseHubConnection("http://localhost:5154/hubs/notifications"))
-            );
+            services.AddSingleton<INotificationsHubConnection, NotificationsHubConnection>(sp =>
+            {
+                var jwtUtils = sp.GetRequiredService<IJwtUtils>();
+                return new NotificationsHubConnection(new BaseHubConnection("http://localhost:5154/hubs/notifications", jwtUtils));
+            });
 
             services.AddTransient<ReservationCreatedEventHandler>();
             services.AddRabbitMqEventBus("notifications_service");
@@ -58,11 +60,7 @@ namespace Notifications.Service
             }
 
             app.UseRouting();
-            app.UseAuthentication();
-            app.UseAuthorization();
-
-            app.UseHttpsRedirection();
-
+            
             app.UseCors(builder =>
             {
                 builder
@@ -72,9 +70,15 @@ namespace Notifications.Service
                     .AllowCredentials();
             });
 
+            app.UseAuthentication();
+            app.UseAuthorization();
+
+            app.UseHttpsRedirection();
+
+
             app.UseEndpoints(endpoint =>
             {
-                endpoint.MapHub<NotificationsHub>("/hubs/notifications");
+                endpoint.MapHub<NotificationsHub>("/hubs/notifications");//;.RequireAuthorization();
 
                 endpoint.MapGet( "/notifications",  async (INotificationsRepository notificationsRepository)
                     => await notificationsRepository.GetNotificationsAsync().ConfigureAwait(false));

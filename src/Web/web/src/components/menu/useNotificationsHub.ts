@@ -1,5 +1,6 @@
 import { HubConnection, HubConnectionBuilder } from "@microsoft/signalr";
 import { useEffect, useState } from "react";
+import { authService } from "../../services/auth";
 
 export default function useNotificationsHub({
   onNotificationCreated,
@@ -9,12 +10,14 @@ export default function useNotificationsHub({
   const [connection, setConnection] = useState<null | HubConnection>(null);
 
   useEffect(() => {
-    const connect = new HubConnectionBuilder()
-      .withUrl("http://localhost:5154/hubs/notifications")
+    const connection = new HubConnectionBuilder()
+      .withUrl("http://localhost:5154/hubs/notifications", {
+        accessTokenFactory: () => authService.getAccessToken()!,
+      })
       .withAutomaticReconnect()
       .build();
 
-    setConnection(connect);
+    setConnection(connection);
   }, []);
 
   useEffect(() => {

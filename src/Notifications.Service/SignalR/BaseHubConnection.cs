@@ -1,6 +1,11 @@
 ﻿using Microsoft.AspNetCore.SignalR.Client;
 using Polly.Retry;
 using Polly;
+using Microsoft.IdentityModel.Tokens;
+using Services.Common;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace Notifications.Service.SignalR
 {
@@ -10,7 +15,7 @@ namespace Notifications.Service.SignalR
 
         Task StartConnection();
 
-        Task InvokeAsync(string methodName, object arg1);
+        Task InvokeAsync(string methodName, string message, string receiverId);
     }
 
     public class BaseHubConnection : IBaseHubConnection
@@ -20,10 +25,13 @@ namespace Notifications.Service.SignalR
 
         public HubConnection Connection => _connection;
 
-        public BaseHubConnection(string hubUrl)
+        public BaseHubConnection(string hubUrl, IJwtUtils jwtUtils)
         {
             _connection = new HubConnectionBuilder()
-                .WithUrl(hubUrl)
+                .WithUrl(hubUrl, options =>
+                {
+                    options.AccessTokenProvider = () => Task.FromResult<string?>(jwtUtils.CreateToken(new List<Claim>()));
+                })
                 .Build();
 
             _resiliencePipeline = new ResiliencePipelineBuilder()
@@ -53,14 +61,14 @@ namespace Notifications.Service.SignalR
             }).ConfigureAwait(false);
         }
 
-        public async Task InvokeAsync(string methodName, object arg1)
+        public async Task InvokeAsync(string methodName, string message, string receiverId)
         {
             if (_connection.State != HubConnectionState.Connected)
             {
                 await StartConnection().ConfigureAwait(false);
             }
 
-            await _connection.InvokeAsync(methodName, arg1).ConfigureAwait(false);
+            await _connection.InvokeAsync(methodName, message, receiverId).ConfigureAwait(false);
         }
     }
 }

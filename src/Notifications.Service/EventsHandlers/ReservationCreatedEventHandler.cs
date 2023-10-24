@@ -33,7 +33,7 @@ namespace Notifications.Service.EventsHandlers
                 return;
             }
 
-            await _notificationsHubConnection.SendNotificationCreated().ConfigureAwait(false);
+            await _notificationsHubConnection.SendNotificationCreated(@event.SlotOwnerId.ToString()).ConfigureAwait(false);
         }
     }
 }

@@ -15,7 +15,7 @@ namespace Authentication.Service.Endpoints
     {
         public static void MapSignInEndpoint(this IEndpointRouteBuilder endpoint, JwtConfig jwtConfig)
         {
-            endpoint.MapPost("/signin", async (UserSignInDto userSignIn, UserManager<User> userManager) =>
+            endpoint.MapPost("/signin", async (UserSignInDto userSignIn, UserManager<User> userManager, IJwtUtils jwtUtils) =>
             {
                 var user = await userManager.FindByEmailAsync(userSignIn.Email);
 
@@ -35,8 +35,8 @@ namespace Authentication.Service.Endpoints
                     .Select(role => new Claim(ClaimTypes.Role, role))
                     .Union(new List<Claim>() { new(ClaimsConstants.UserId, user.Id.ToString()), new(ClaimsConstants.UserName, user.UserName) }).ToList();
 
-                var token = CreateToken(claims, jwtConfig);
-                var refreshToken = GenerateRefreshToken();
+                var token = jwtUtils.CreateToken(claims);
+                var refreshToken = jwtUtils.GenerateRandomToken();
                 
                 user.RefreshToken = refreshToken;
                 user.RefreshTokenExpirationDate = DateTime.Now.AddHours(8);
@@ -46,9 +46,9 @@ namespace Authentication.Service.Endpoints
                 return Results.Ok(new Token() {  AccessToken = token, RefreshToken = refreshToken });
             });
 
-            endpoint.MapPost("/refresh-token", async (UserManager<User> userManager, Token token) =>
+            endpoint.MapPost("/refresh-token", async (UserManager<User> userManager, Token token, IJwtUtils jwtUtils) =>
             {
-                var claimsPrincipal = GetClaimsPrincipal(token.AccessToken, jwtConfig.Key);
+                var claimsPrincipal = jwtUtils.GetClaimsPrincipal(token.AccessToken, jwtConfig.Key);
 
                 if (claimsPrincipal == null)
                 {
@@ -64,67 +64,14 @@ namespace Authentication.Service.Endpoints
                     return Results.BadRequest("Invalid access token or refresh token");
                 }
 
-                var newAccessToken = CreateToken(claimsPrincipal.Claims.ToList(), jwtConfig);
-                var newRefreshToken = GenerateRefreshToken();
+                var newAccessToken = jwtUtils.CreateToken(claimsPrincipal.Claims.ToList());
+                var newRefreshToken = jwtUtils.GenerateRandomToken();
 
                 user.RefreshToken = newRefreshToken;
                 await userManager.UpdateAsync(user);
 
                 return Results.Ok(new Token() { AccessToken = newAccessToken, RefreshToken = newRefreshToken });
             });
-        }
-
-        private static string CreateToken(IReadOnlyCollection<Claim> claims, JwtConfig jwtConfig)
-        {
-            var signingCredentials =
-                new SigningCredentials(new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtConfig.Key)),
-                    SecurityAlgorithms.HmacSha256);
-
-            var tokenOptions = new JwtSecurityToken(
-                issuer: jwtConfig.Issuer,
-                audience: jwtConfig.Audience,
-                expires: DateTime.Now.AddDays(20), //DateTime.Now.AddMinutes(15),
-                claims: claims,
-                signingCredentials: signingCredentials);
-
-            var token = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
-
-            return token;
-        }
-
-        private static ClaimsPrincipal? GetClaimsPrincipal(string token, string key)
-        {
-            var tokenValidationParameters = new TokenValidationParameters
-            {
-                ValidateAudience = false,
-                ValidateIssuer = false,
-                ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key)),
-                ValidateLifetime = false
-            };
-
-            var tokenHandler = new JwtSecurityTokenHandler();
-            
-            var claimsPrincipal = tokenHandler.ValidateToken(token, tokenValidationParameters, out SecurityToken securityToken);
-            
-            if (securityToken is not JwtSecurityToken jwtSecurityToken ||
-                !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256,
-                    StringComparison.InvariantCultureIgnoreCase))
-            {
-                throw new SecurityTokenException("Invalid token");
-
-            }
-
-            return claimsPrincipal;
-
-        }
-
-        private static string GenerateRefreshToken()
-        {
-            var randomNumber = new byte[64];
-            using var rng = RandomNumberGenerator.Create();
-            rng.GetBytes(randomNumber);
-            return Convert.ToBase64String(randomNumber);
         }
     }
 }

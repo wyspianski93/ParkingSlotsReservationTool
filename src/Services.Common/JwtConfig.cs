@@ -1,6 +1,15 @@
 ﻿namespace Services.Common
 {
-    public class JwtConfig
+    public interface IJwtConfig
+    {
+        string Key { get; set; }
+
+        string Audience { get; set; }
+
+        string Issuer { get; set; }
+    }
+
+    public class JwtConfig : IJwtConfig
     {
         public string Key { get; set; } = string.Empty;
 

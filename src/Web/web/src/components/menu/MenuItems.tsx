@@ -4,16 +4,16 @@ import { isMenuAccessibleRoute } from "../../routing/menuAccessibleRoute";
 import { authorizedRoutes } from "../../routing/routes";
 import { userAuthorizationState } from "../../state/userAuthorizationState";
 import { MenuNavigationItem } from "./MenuItem";
+import { NotificationsMenuItem } from "./NotificationsMenuItem";
 
 export function MenuItems(): JSX.Element {
   const { isAuthorized } = useRecoilValue(userAuthorizationState);
 
   return (
-    <div style={{ display: "flex", flexDirection: "row", padding: "5px" }}>
-      {isAuthorized &&
-        authorizedRoutes
-          .filter(isMenuAccessibleRoute)
-          .map((authorizedRoute) => (
+    <>
+      {isAuthorized && (
+        <div style={{ display: "flex", flexDirection: "row", padding: "5px" }}>
+          {authorizedRoutes.filter(isMenuAccessibleRoute).map((authorizedRoute) => (
             <MenuNavigationItem
               key={`${authorizedRoute.name}_${authorizedRoute.path}`}
               navigationPath={authorizedRoute.path}
@@ -21,6 +21,9 @@ export function MenuItems(): JSX.Element {
               name={authorizedRoute.name}
             ></MenuNavigationItem>
           ))}
-    </div>
+          <NotificationsMenuItem />
+        </div>
+      )}
+    </>
   );
 }

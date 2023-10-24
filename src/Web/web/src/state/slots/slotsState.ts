@@ -1,5 +1,5 @@
 import { selector, selectorFamily } from "recoil";
-import { getReservableSlots, getSlots } from "../../services/slots";
+import { getReservableSlots, getSlot, getSlots } from "../../services/slots";
 import { userAuthorizationState } from "../userAuthorizationState";
 import { slotsFilterState } from "./slotsFilterState";
 
@@ -25,9 +25,8 @@ export const slotByIdSelector = selectorFamily({
   key: "slotByIdSelector",
   get:
     (slotId: string) =>
-    ({ get }) => {
-      const slots = get(slotsSelector);
-      const slot = slots.find((x) => x.id == slotId);
+    async ({ get }) => {
+      const { slot } = await getSlot(slotId);
       return slot;
     },
 });

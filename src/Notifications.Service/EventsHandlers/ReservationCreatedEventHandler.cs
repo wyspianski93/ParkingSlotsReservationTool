@@ -22,6 +22,7 @@ namespace Notifications.Service.EventsHandlers
             {
                 await _notificationsRepository.AddNotificationAsync(new Notification()
                     {
+                        Id = Guid.NewGuid(),
                         ReceiverId = @event.SlotOwnerId,
                         Content = $"A reservation has been created for slot {@event.SlotName}"
                     }).ConfigureAwait(false);

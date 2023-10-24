@@ -1,6 +1,5 @@
-import { HubConnection, HubConnectionBuilder } from "@microsoft/signalr";
 import { ThemeProvider } from "@mui/material";
-import React, { Suspense, useEffect, useState } from "react";
+import React, { Suspense } from "react";
 import ReactDOM from "react-dom/client";
 import {
   Route,
@@ -49,42 +48,10 @@ const router = createBrowserRouter(
 root.render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
-      <Hub>
-        <RecoilRoot>
-          <RecoilNexus />
-          <RouterProvider router={router} />
-        </RecoilRoot>
-      </Hub>
+      <RecoilRoot>
+        <RecoilNexus />
+        <RouterProvider router={router} />
+      </RecoilRoot>
     </ThemeProvider>
   </React.StrictMode>,
 );
-
-function Hub({ children }: { children: JSX.Element }): JSX.Element {
-  const [connection, setConnection] = useState<null | HubConnection>(null);
-
-  useEffect(() => {
-    const connect = new HubConnectionBuilder()
-      .withUrl("http://localhost:5154/hubs/notifications")
-      .withAutomaticReconnect()
-      .build();
-
-    setConnection(connect);
-  }, []);
-
-  useEffect(() => {
-    const startConnection = async () => {
-      if (connection) {
-        await connection.start();
-      }
-    };
-
-    if (connection) {
-      startConnection();
-      connection.on("NotificationCreated", (message) => {
-        console.log(message);
-      });
-    }
-  }, [connection]);
-
-  return children;
-}

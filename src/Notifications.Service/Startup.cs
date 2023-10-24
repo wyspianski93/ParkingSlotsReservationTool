@@ -4,6 +4,7 @@ using Storage;
 using Storage.Serializing;
 using Microsoft.AspNetCore.SignalR;
 using Notifications.Service.SignalR;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Notifications.Service
 {
@@ -74,6 +75,9 @@ namespace Notifications.Service
             app.UseEndpoints(endpoint =>
             {
                 endpoint.MapHub<NotificationsHub>("/hubs/notifications");
+
+                endpoint.MapGet( "/notifications",  async (INotificationsRepository notificationsRepository)
+                    => await notificationsRepository.GetNotificationsAsync().ConfigureAwait(false));
             });
         }
     }

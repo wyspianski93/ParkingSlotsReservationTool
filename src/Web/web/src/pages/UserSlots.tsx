@@ -1,5 +1,5 @@
 import { Button, Grid, styled } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRecoilRefresher_UNSTABLE, useRecoilValue } from "recoil";
 import { AddSlotDialog } from "../components/slots/user-slots/AddSlotDialog";
 import { UserSlotSimpleView } from "../components/slots/user-slots/UserSlotSimpleView";
@@ -10,6 +10,10 @@ export function UserSlots(): JSX.Element {
 
   const slots = useRecoilValue(slotsByCurrentUserSelector);
   const refreshSlots = useRecoilRefresher_UNSTABLE(slotsByCurrentUserSelector);
+
+  useEffect(() => {
+    refreshSlots();
+  }, []);
 
   return (
     <>

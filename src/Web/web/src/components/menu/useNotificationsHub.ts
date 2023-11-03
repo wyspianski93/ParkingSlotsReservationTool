@@ -1,4 +1,4 @@
-import { HubConnection, HubConnectionBuilder } from "@microsoft/signalr";
+import { HubConnection, HubConnectionBuilder, HubConnectionState } from "@microsoft/signalr";
 import { useEffect, useState } from "react";
 import { authService } from "../../services/auth";
 
@@ -27,7 +27,7 @@ export default function useNotificationsHub({
       }
     };
 
-    if (connection) {
+    if (connection && connection.state != HubConnectionState.Connected) {
       startConnection();
       connection.on("NotificationCreated", (message) => {
         console.log(message);
